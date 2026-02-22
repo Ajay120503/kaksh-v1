@@ -139,9 +139,9 @@ export default function Notifications() {
                   {unread && (
                     <button
                       onClick={() => markRead(n._id)}
-                      className="btn btn-success btn-xs btn-circle"
+                      className="btn btn-success btn-xs"
                     >
-                      <Check size={14} />
+                      {/* <Check size={14} /> */} Mark as Read
                     </button>
                   )}
 
