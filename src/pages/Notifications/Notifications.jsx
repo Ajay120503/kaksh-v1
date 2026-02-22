@@ -39,7 +39,7 @@ export default function Notifications() {
           if (n._id === id) {
             // update recipients immutably
             const updatedRecipients = n.recipients.map((r) =>
-              r.user.toString() === user.id ? { ...r, read: true } : r
+              String(r.user) === String(user._id) ? { ...r, read: true } : r
             );
             return { ...n, recipients: updatedRecipients };
           }
@@ -100,17 +100,17 @@ export default function Notifications() {
       <div className="space-y-4">
         {roleNotifications.map((n) => {
           const myRecipient = n.recipients.find(
-            (r) => r.user.toString() === user.id
+            (r) => String(r.user) === String(user._id)
           );
 
-          const unread = myRecipient ? !myRecipient.read : false;
+          const unread = myRecipient ? myRecipient.read === false : false;
 
           return (
             <div
               key={n._id}
               onClick={() => handleRedirect(n)}
               className={`
-                card border transition-all duration-200 cursor-pointer
+                card border cursor-pointer
                 hover:shadow-lg hover:bg-base-300
                 ${
                   unread
@@ -139,7 +139,7 @@ export default function Notifications() {
                   {unread && (
                     <button
                       onClick={() => markRead(n._id)}
-                      className="btn btn-success btn-xs text-white btn-circle"
+                      className="btn btn-success btn-xs btn-circle"
                     >
                       <Check size={14} />
                     </button>
@@ -147,7 +147,7 @@ export default function Notifications() {
 
                   <button
                     onClick={() => remove(n._id)}
-                    className="btn btn-error btn-xs text-white btn-circle"
+                    className="btn btn-error btn-xs btn-circle"
                   >
                     <Trash2 size={14} />
                   </button>

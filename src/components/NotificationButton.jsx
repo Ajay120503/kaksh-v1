@@ -37,7 +37,7 @@ export default function NotificationButton() {
         className="
           text-base-content
           transition-transform duration-200
-          group-hover:scale-110
+          group-hover:scale-110 
         "
       />
 
@@ -51,7 +51,7 @@ export default function NotificationButton() {
             flex items-center justify-center
             text-[10px] font-bold
             rounded-full
-            bg-primary text-error-content
+            bg-primary text-white
             shadow-md
           "
         >
