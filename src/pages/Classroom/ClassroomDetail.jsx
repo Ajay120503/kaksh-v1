@@ -116,7 +116,7 @@ export default function ClassroomDetail() {
 
   if (!classroom)
     return (
-      <div className="p-6 text-center">
+      <div className="p-6 text-center h-100 flex justify-center">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
