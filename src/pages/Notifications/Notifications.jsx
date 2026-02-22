@@ -111,7 +111,7 @@ export default function Notifications() {
               onClick={() => handleRedirect(n)}
               className={`
                 card border transition-all duration-200 cursor-pointer
-                hover:shadow-lg hover:-translate-y-0.5
+                hover:shadow-lg hover:bg-base-300
                 ${
                   unread
                     ? "bg-primary/10 border-primary"
