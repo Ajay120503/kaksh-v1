@@ -27,7 +27,7 @@ export default function NotificationButton() {
       className="
         relative
         btn btn-ghost btn-circle
-        hover:bg-base-200
+        hover:bg-base-300
         transition-all duration-200
       "
     >
