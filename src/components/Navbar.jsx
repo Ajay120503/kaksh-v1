@@ -3,6 +3,7 @@ import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import NotificationButton from "../components/NotificationButton";
+import RequestTeacherButton from "./RequestTeacherButton";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -26,6 +27,7 @@ export default function Navbar() {
 
       {/* RIGHT */}
       <div className="flex-none flex items-center gap-1">
+        {user?.role === "student" && <RequestTeacherButton />}
         <NotificationButton />
         {/* USER DROPDOWN */}
         <div className="dropdown dropdown-end">

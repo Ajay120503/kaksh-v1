@@ -36,6 +36,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import UserManagement from "../pages/admin/UserManagement";
 import AdminStats from "../pages/admin/AdminStats";
 import AdminClassrooms from "../pages/admin/AdminClassrooms";
+import AdminRoleRequests from "../pages/admin/AdminRoleRequests";
 
 /* NOTIFICATIOSN */
 
@@ -148,6 +149,7 @@ export default function AppRoutes() {
             <Route path="users" element={<UserManagement />} />
             <Route path="stats" element={<AdminStats />} />
             <Route path="classrooms" element={<AdminClassrooms />} />
+            <Route path="role-requests" element={<AdminRoleRequests />} />
           </Route>
         </Route>
 

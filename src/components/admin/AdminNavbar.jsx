@@ -3,6 +3,7 @@ import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import NotificationButton from "../../components/NotificationButton";
+import { UserPlus } from "lucide-react";
 
 export default function AdminNavbar() {
   const { user, logout } = useAuth();
@@ -26,6 +27,13 @@ export default function AdminNavbar() {
 
       {/* RIGHT */}
       <div className="flex-none flex items-center gap-1">
+        <Link
+          to="/120503/role-requests"
+          className="btn btn-circle hover:bg-base-300 btn-ghost"
+        >
+          <UserPlus size={20} />
+        </Link>
+
         {/* USER DROPDOWN */}
         <NotificationButton />
         <div className="dropdown dropdown-end">
