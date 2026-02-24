@@ -41,6 +41,7 @@ import AdminRoleRequests from "../pages/admin/AdminRoleRequests";
 /* NOTIFICATIOSN */
 
 import Notifications from "../pages/Notifications/Notifications";
+import JoinRequests from "../pages/Classroom/JoinRequests";
 
 /* AUTH GUARD */
 const PrivateRoute = ({ children }) => {
@@ -140,6 +141,7 @@ export default function AppRoutes() {
           />
           {/* Notifications */}
           <Route path="notifications" element={<Notifications />} />
+          <Route path="join-requests" element={<JoinRequests />} />
         </Route>
 
         {/* ---------- ADMIN APP ---------- */}

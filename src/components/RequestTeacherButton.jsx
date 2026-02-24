@@ -58,14 +58,14 @@ export default function RequestTeacherButton() {
 
   /* ================= LABEL ================= */
 
-  const label =
-    user?.role === "teacher"
-      ? "You are a Teacher"
-      : requestStatus === "pending"
-      ? "Request Pending"
-      : requestStatus === "rejected"
-      ? "Request Rejected"
-      : "Become Teacher";
+  // const label =
+  //   user?.role === "teacher"
+  //     ? "You are a Teacher"
+  //     : requestStatus === "pending"
+  //     ? "Request Pending"
+  //     : requestStatus === "rejected"
+  //     ? "Request Rejected"
+  //     : "Become Teacher";
 
   if (checking)
     return (

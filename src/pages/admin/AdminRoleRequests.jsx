@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import adminService from "../../services/adminService";
 import toast from "react-hot-toast";
-import { Trash2 } from "lucide-react";
+import { FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 
 export default function AdminRoleRequests() {
   const [requests, setRequests] = useState([]);
@@ -62,77 +62,121 @@ export default function AdminRoleRequests() {
     );
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Teacher Role Requests</h1>
+    <div className="max-w-4xl mx-auto">
+      {/* HEADER */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="p-3 rounded-full bg-primary/10">
+          <span className="text-xl">🛡️</span>
+        </div>
+        <h1 className="text-2xl font-bold">Teacher Role Requests</h1>
+      </div>
 
-      <div className="overflow-x-auto bg-base-100 shadow rounded-box">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Requested Role</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+      {/* LOADING */}
+      {loading && (
+        <div className="flex justify-center mt-10">
+          <span className="loading loading-lg"></span>
+        </div>
+      )}
 
-          <tbody>
-            {requests.map((req) => (
-              <tr key={req._id}>
-                <td>{req.user?.name}</td>
-                <td>{req.user?.email}</td>
+      {/* EMPTY STATE */}
+      {!loading && requests.length === 0 && (
+        <div className="text-center py-16 text-base-content/60">
+          <p className="text-lg">No role requests available</p>
+          <p className="text-sm opacity-70">
+            Teacher requests will appear here
+          </p>
+        </div>
+      )}
 
-                <td>
-                  <span className="badge badge-info">{req.requestedRole}</span>
-                </td>
+      {/* NOTIFICATION LIST */}
+      <div className="space-y-4">
+        {requests.map((req) => (
+          <div
+            key={req._id}
+            className="group flex gap-4 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
+          >
+            {/* STATUS BAR */}
+            <div
+              className={`w-1 rounded-full ${
+                req.status === "approved"
+                  ? "bg-success"
+                  : req.status === "rejected"
+                  ? "bg-error"
+                  : "bg-warning"
+              }`}
+            />
 
-                <td>
-                  <span
-                    className={`badge ${
-                      req.status === "approved"
-                        ? "badge-success"
-                        : req.status === "rejected"
-                        ? "badge-error"
-                        : "badge-warning"
-                    }`}
+            {/* USER AVATAR */}
+            <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-lg shrink-0">
+              {req.user?.name?.charAt(0).toUpperCase()}
+            </div>
+
+            {/* CONTENT */}
+            <div className="flex-1">
+              <p className="font-semibold text-lg">
+                {req.user?.name}
+                <span className="font-normal text-base-content/70">
+                  {" "}
+                  requested role{" "}
+                </span>
+                <span className="text-primary font-medium">
+                  {req.requestedRole}
+                </span>
+              </p>
+
+              <p className="text-sm text-base-content/60 mt-1">
+                {req.user?.email}
+              </p>
+
+              <div className="mt-3 flex items-center gap-3">
+                <span
+                  className={`badge badge-sm ${
+                    req.status === "approved"
+                      ? "badge-success"
+                      : req.status === "rejected"
+                      ? "badge-error"
+                      : "badge-warning"
+                  }`}
+                >
+                  {req.status}
+                </span>
+
+                <span className="text-xs text-base-content/50">
+                  Role change request
+                </span>
+              </div>
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+              {req.status === "pending" && (
+                <>
+                  <button
+                    onClick={() => approve(req._id)}
+                    className="btn btn-xs btn-success btn-circle"
+                    title="Approve"
                   >
-                    {req.status}
-                  </span>
-                </td>
+                    <FaCheck size={16} />
+                  </button>
 
-                <td className="space-x-2">
-                  {req.status === "pending" && (
-                    <>
-                      <button
-                        onClick={() => approve(req._id)}
-                        className="btn btn-xs btn-success"
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        onClick={() => reject(req._id)}
-                        className="btn btn-xs btn-error"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                  {/* DELETE BUTTON */}
-                  <div className="tooltip" data-tip="Delete Request">
-                    <button
-                      onClick={() => deleteRequest(req._id)}
-                      className="btn btn-xs btn-circle btn-ghost text-error"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <button
+                    onClick={() => reject(req._id)}
+                    className="btn btn-xs btn-error btn-circle"
+                    title="Reject"
+                  >
+                    <FaTimes size={16} />
+                  </button>
+                </>
+              )}
+              <button
+                onClick={() => deleteRequest(req._id)}
+                className="btn btn-xs btn-circle btn-ghost text-error"
+              >
+                <FaTrash size={16} />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
