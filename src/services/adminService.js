@@ -17,7 +17,8 @@ const adminService = {
 
   getRoleRequests: () => api.get("/role-requests"),
   approveRoleRequest: (id) => api.patch(`/role-requests/${id}/approve`),
-  rejectRoleRequest: (id) => api.patch(`/role-requests/${id}/reject`)
+  rejectRoleRequest: (id) => api.patch(`/role-requests/${id}/reject`),
+  deleteRoleRequest: (id) => api.delete(`/role-requests/${id}`),
 };
 
 export default adminService;

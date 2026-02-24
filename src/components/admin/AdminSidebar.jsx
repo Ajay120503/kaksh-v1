@@ -54,7 +54,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Admin Info */}
-      <div className="flex items-center gap-3 p-3 border-b border-base-300">
+      {/* <div className="flex items-center gap-3 p-3 border-b border-base-300">
         <div className="avatar placeholder">
           <div className="bg-primary text-white rounded-full w-10 flex items-center justify-center text-lg font-bold">
             {(() => {
@@ -75,7 +75,34 @@ export default function AdminSidebar() {
             <p className="text-xs opacity-60 mt-1">Administrator</p>
           </div>
         )}
-      </div>
+      </div> */}
+      <Link
+        to="/profile"
+        className="flex items-center gap-3 p-2 cursor-pointer group border-b-2 border-base-300 hover:bg-base-300"
+      >
+        {/* Avatar */}
+        <div
+          className="bg-primary text-white rounded-full w-10 h-10
+               flex items-center justify-center
+               text-sm font-bold shadow-md"
+        >
+          {(() => {
+            const name = user?.name || "";
+            const parts = name.trim().split(" ").filter(Boolean);
+
+            if (parts.length === 0) return "U";
+            if (parts.length === 1) return parts[0][0].toUpperCase();
+
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+          })()}
+        </div>
+
+        {/* Name (optional but recommended UX) */}
+        <div className="hidden sm:flex flex-col leading-tight">
+          <span className="font-semibold text-sm">{user?.name || "User"}</span>
+          <span className="text-xs opacity-60">View Profile</span>
+        </div>
+      </Link>
 
       {/* Menu */}
       <ul className="menu grow w-full p-2">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import adminService from "../../services/adminService";
 import toast from "react-hot-toast";
+import { Trash2 } from "lucide-react";
 
 export default function AdminRoleRequests() {
   const [requests, setRequests] = useState([]);
@@ -43,6 +44,16 @@ export default function AdminRoleRequests() {
     }
   };
 
+  const deleteRequest = async (id) => {
+    try {
+      await adminService.deleteRoleRequest(id);
+      toast.success("Request deleted");
+      fetchRequests();
+    } catch {
+      toast.error("Delete failed");
+    }
+  };
+
   if (loading)
     return (
       <div className="flex justify-center mt-10">
@@ -51,7 +62,7 @@ export default function AdminRoleRequests() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Teacher Role Requests</h1>
 
       <div className="overflow-x-auto bg-base-100 shadow rounded-box">
@@ -108,6 +119,15 @@ export default function AdminRoleRequests() {
                       </button>
                     </>
                   )}
+                  {/* DELETE BUTTON */}
+                  <div className="tooltip" data-tip="Delete Request">
+                    <button
+                      onClick={() => deleteRequest(req._id)}
+                      className="btn btn-xs btn-circle btn-ghost text-error"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

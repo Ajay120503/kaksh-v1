@@ -69,7 +69,7 @@ export default function RequestTeacherButton() {
 
   if (checking)
     return (
-      <button className="btn btn-disabled">
+      <button className="btn btn-disabled btn-circle btn-md">
         <span className="loading loading-spinner"></span>
       </button>
     );
@@ -78,7 +78,9 @@ export default function RequestTeacherButton() {
     <button
       onClick={sendRequest}
       disabled={disabled}
-      className={`btn btn-circle ${disabled ? "btn-disabled" : "btn-primary"}`}
+      className={`btn btn-circle btn-md ${
+        disabled ? "btn-disabled" : "btn-secondary"
+      }`}
     >
       {loading ? (
         <span className="loading loading-spinner"></span>
