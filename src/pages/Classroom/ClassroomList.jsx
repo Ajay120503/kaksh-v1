@@ -65,7 +65,7 @@ export default function ClassroomList() {
       {/* Header */}
       <div className="flex justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">
+          <h1 className="text-2xl sm:text-2xl font-bold">
             {user?.role === "teacher" ? "My Classrooms" : "Join Classrooms"}
           </h1>
           <p className="text-sm text-base-content/60 mt-1">

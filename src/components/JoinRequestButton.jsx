@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaUserClock } from "react-icons/fa";
+import { UserPlus } from "lucide-react";
 
 export default function JoinRequestButton() {
   const navigate = useNavigate();
@@ -11,9 +11,9 @@ export default function JoinRequestButton() {
   return (
     <button
       onClick={handleRedirect}
-      className="btn btn-circle btn-md btn-secondary"
+      className="btn btn-circle btn-md hover:bg-base-300 btn-ghost"
     >
-      <FaUserClock size={18} />
+      <UserPlus size={18} />
     </button>
   );
 }

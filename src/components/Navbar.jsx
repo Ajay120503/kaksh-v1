@@ -28,10 +28,9 @@ export default function Navbar() {
 
       {/* RIGHT */}
       <div className="flex-none flex items-center gap-1">
-        {user?.role === "student" && <RequestTeacherButton />}
-        {user?.role === "teacher" && <JoinRequestButton />}
-
         <NotificationButton />
+        {user?.role === "teacher" && <JoinRequestButton />}
+        {user?.role === "student" && <RequestTeacherButton />}
         {/* USER DROPDOWN */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} className="btn btn-circle avatar placeholder">

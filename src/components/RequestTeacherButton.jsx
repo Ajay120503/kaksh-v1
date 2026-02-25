@@ -73,13 +73,12 @@ export default function RequestTeacherButton() {
         <span className="loading loading-spinner"></span>
       </button>
     );
-
   return (
     <button
       onClick={sendRequest}
       disabled={disabled}
-      className={`btn btn-circle btn-md ${
-        disabled ? "btn-disabled" : "btn-secondary"
+      className={`btn btn-circle btn-md hover:bg-base-300 btn-ghost ${
+        disabled ? "btn-disabled" : "btn-ghost"
       }`}
     >
       {loading ? (

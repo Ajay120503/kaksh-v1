@@ -136,7 +136,7 @@ export default function AllMaterialList() {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center h-72">
         <span className="loading loading-spinner loading-lg" />
       </div>
     );
@@ -144,7 +144,7 @@ export default function AllMaterialList() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="pb-5">
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-2xl font-bold">
           {user.role === "student" ? "My Material" : "Material Overview"}
         </h1>
         <p className="text-sm opacity-70 mt-1">
