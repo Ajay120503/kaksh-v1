@@ -42,6 +42,7 @@ import AdminRoleRequests from "../pages/admin/AdminRoleRequests";
 
 import Notifications from "../pages/Notifications/Notifications";
 import JoinRequests from "../pages/Classroom/JoinRequests";
+// import VerifyOTP from "../pages/Auth/VerifyOTP";
 
 /* AUTH GUARD */
 const PrivateRoute = ({ children }) => {
@@ -73,6 +74,11 @@ export default function AppRoutes() {
           path="/register"
           element={isAuthenticated ? <Navigate to="/" /> : <Register />}
         />
+
+        {/* <Route
+          path="/verify-otp"
+          element={isAuthenticated ? <Navigate to="/" /> : <VerifyOTP />}
+        /> */}
 
         {/* ---------- USER APP ---------- */}
         <Route

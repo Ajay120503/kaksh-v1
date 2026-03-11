@@ -140,7 +140,7 @@ export default function Submission() {
   if (!assignment)
     return <div className="p-6 text-center">Assignment not found</div>;
 
-  const checkDeadlinePassed = (date) => new Date() > new Date(date);
+  // const checkDeadlinePassed = (date) => new Date() > new Date(date);
 
   const exportExcel = () => {
     if (!allSubmissions.length) return;
@@ -272,24 +272,26 @@ export default function Submission() {
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/40"></div>
         <div className="relative h-full flex flex-col px-6 text-white">
           <h1 className="text-3xl font-bold">{assignment.title}</h1>
-          <p className="mt-1 text-sm max-w-2xl md:line-clamp-3 line-clamp-3">
-            {assignment.description}
-          </p>
+          {user?.role == "student" && (
+            <p className="mt-1 text-sm max-w-2xl md:line-clamp-3 line-clamp-3">
+              {assignment.description}
+            </p>
+          )}
           <div className="mt-3 flex gap-3 text-sm">
             <span
-              className={`px-3 py-1 rounded-full font-semibold ${
-                checkDeadlinePassed(assignment.deadline)
-                  ? "bg-red-500/80"
-                  : "bg-green-500/80"
-              }`}
+              className={`px-3 py-1 rounded-full font-semibold bg-white/20`} //${
+              //   checkDeadlinePassed(assignment.isLate)
+              //     ? "bg-red-500/80"
+              //     : "bg-green-500/80"
+              // }`}
             >
-              Due:{" "}
+              Due :{" "}
               {assignment.deadline
                 ? new Date(assignment.deadline).toLocaleDateString()
                 : "—"}
             </span>
-            <span className="px-3 py-1 rounded-full bg-white/20 border">
-              Max Marks: {assignment.maxMarks}
+            <span className="px-3 py-1 rounded-full font-semibold bg-white/20">
+              Max Marks : {assignment.maxMarks}
             </span>
           </div>
         </div>

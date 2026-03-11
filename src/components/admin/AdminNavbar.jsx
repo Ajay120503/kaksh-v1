@@ -28,12 +28,14 @@ export default function AdminNavbar() {
       {/* RIGHT */}
       <div className="flex-none flex items-center gap-1">
         <NotificationButton />
-        <Link
-          to="/120503/role-requests"
-          className="btn btn-circle hover:bg-base-300 btn-ghost"
-        >
-          <UserPlus size={20} />
-        </Link>
+        <div className="tooltip  tooltip-left" data-tip="See Request">
+          <Link
+            to="/120503/role-requests"
+            className="btn btn-circle hover:bg-base-300 btn-ghost"
+          >
+            <UserPlus size={20} />
+          </Link>
+        </div>
         {/* USER DROPDOWN */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} className="btn btn-circle avatar placeholder">
