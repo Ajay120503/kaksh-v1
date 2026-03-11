@@ -736,26 +736,26 @@ export default function Submission() {
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-60">
               <div
                 className="
-    bg-base-100
-    w-full h-full
-    sm:h-auto sm:max-h-150
-    sm:max-w-4xl
-    rounded-none lg:rounded-3xl
-    shadow-2xl
-    border-0 sm:border border-base-300
-    overflow-hidden
-    flex flex-col
-  "
+                          bg-base-100
+                          w-full h-full
+                          sm:h-auto sm:max-h-150
+                          sm:max-w-4xl
+                          rounded-none lg:rounded-3xl
+                          shadow-2xl
+                          border-0 sm:border border-base-300
+                          overflow-hidden
+                          flex flex-col
+                        "
               >
                 {/* ===== HEADER ===== */}
                 <div
                   className="
-  flex items-center justify-between
-  px-3 py-4
-  border-b border-base-300
-  bg-base-200
-  sticky top-0 z-10
-"
+                        flex items-center justify-between
+                        px-3 py-4
+                        border-b border-base-300
+                        bg-base-200
+                        sticky top-0 z-10
+                      "
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-warning/10 flex items-center justify-center text-xl">
@@ -923,62 +923,6 @@ export default function Submission() {
                         })}
                       </div>
                     )}
-                  </div>
-
-                  {/* ===== FOOTER ===== */}
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button
-                      className="btn btn-outline btn-sm"
-                      onClick={() => {
-                        if (!activePlagiarism) return;
-
-                        /* ===== Prepare Excel Data ===== */
-                        const rows = activePlagiarism.matches.map(
-                          (match, index) => ({
-                            "Sr No": index + 1,
-                            "Student Name": match.student?.name || "Unknown",
-                            Email: match.student?.email || "—",
-                            Similarity: `${
-                              match.similarity ?? activePlagiarism.score
-                            }%`,
-                          })
-                        );
-
-                        // Summary row (top info)
-                        const summary = [
-                          {
-                            "Sr No": "",
-                            "Student Name": "Overall Similarity",
-                            Email: "",
-                            Similarity: `${activePlagiarism.score}%`,
-                          },
-                        ];
-
-                        const data = [...summary, ...rows];
-
-                        /* ===== Create Workbook ===== */
-                        const worksheet = XLSX.utils.json_to_sheet(data);
-                        const workbook = XLSX.utils.book_new();
-
-                        XLSX.utils.book_append_sheet(
-                          workbook,
-                          worksheet,
-                          "Plagiarism Report"
-                        );
-
-                        /* ===== Download Excel ===== */
-                        XLSX.writeFile(workbook, "plagiarism-report.xlsx");
-                      }}
-                    >
-                      Export Excel
-                    </button>
-
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => setShowPlagModal(false)}
-                    >
-                      Close
-                    </button>
                   </div>
                 </div>
               </div>
