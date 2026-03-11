@@ -154,7 +154,7 @@ export default function AdminDashboard() {
 
 function StatCard({ label, value, icon, gradient }) {
   return (
-    <div className="relative overflow-hidden bg-base-100 border border-base-300 shadow-xl hover:-translate-y-1 transition">
+    <div className="relative overflow-hidden bg-base-100 border border-base-300 shadow-xl">
       <div className={`h-2 bg-linear-to-r ${gradient}`} />
       <div className="p-6 flex items-center gap-4">
         <div className="p-4 rounded-2xl bg-base-200 text-3xl shadow-inner">
