@@ -74,10 +74,21 @@ export default function JoinRequests() {
                   : "bg-error"
               }`}
             />
+            {/* Avatar */}
+            <div
+              className="bg-primary text-white rounded-full w-10 h-10
+               flex items-center justify-center
+               text-sm font-bold shadow-md"
+            >
+              {(() => {
+                const name = r?.student?.name || "";
+                const parts = name.trim().split(" ").filter(Boolean);
 
-            {/* AVATAR */}
-            <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-lg shrink-0">
-              {r.student.name?.charAt(0).toUpperCase()}
+                if (parts.length === 0) return "U";
+                if (parts.length === 1) return parts[0][0].toUpperCase();
+
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+              })()}
             </div>
 
             {/* CONTENT */}

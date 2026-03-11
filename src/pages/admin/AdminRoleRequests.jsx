@@ -89,11 +89,11 @@ export default function AdminRoleRequests() {
       )}
 
       {/* NOTIFICATION LIST */}
-      <div className="space-y-4">
+      <div className="space-y-1">
         {requests.map((req) => (
           <div
             key={req._id}
-            className="group flex gap-4 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
+            className="group flex gap-2 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
           >
             {/* STATUS BAR */}
             <div
@@ -106,9 +106,21 @@ export default function AdminRoleRequests() {
               }`}
             />
 
-            {/* USER AVATAR */}
-            <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-lg shrink-0">
-              {req.user?.name?.charAt(0).toUpperCase()}
+            {/* Avatar */}
+            <div
+              className="bg-primary text-white rounded-full w-10 h-10
+               flex items-center justify-center
+               text-sm font-bold shadow-md"
+            >
+              {(() => {
+                const name = req?.user?.name || "";
+                const parts = name.trim().split(" ").filter(Boolean);
+
+                if (parts.length === 0) return "U";
+                if (parts.length === 1) return parts[0][0].toUpperCase();
+
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+              })()}
             </div>
 
             {/* CONTENT */}
@@ -124,11 +136,9 @@ export default function AdminRoleRequests() {
                 </span>
               </p>
 
-              <p className="text-sm text-base-content/60 mt-1">
-                {req.user?.email}
-              </p>
+              <p className="text-sm text-base-content/60">{req.user?.email}</p>
 
-              <div className="mt-3 flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <span
                   className={`badge badge-sm ${
                     req.status === "approved"
