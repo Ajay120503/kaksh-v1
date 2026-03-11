@@ -1,7 +1,6 @@
 import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
 import { FaUsers, FaChartBar, FaHome, FaSchool } from "react-icons/fa";
-import { FiSidebar } from "react-icons/fi";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function AdminSidebar() {
@@ -112,7 +111,7 @@ export default function AdminSidebar() {
               to={item.path}
               end
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg ${
+                `flex items-center gap-3 rounded-none ${
                   isActive
                     ? "bg-primary text-white"
                     : "hover:bg-base-300 transition"
