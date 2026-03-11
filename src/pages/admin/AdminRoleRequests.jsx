@@ -125,7 +125,7 @@ export default function AdminRoleRequests() {
 
             {/* CONTENT */}
             <div className="flex-1">
-              <p className="font-semibold text-lg">
+              <p className="font-semibold">
                 {req.user?.name}
                 <span className="font-normal text-base-content/70">
                   {" "}
