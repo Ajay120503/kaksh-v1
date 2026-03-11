@@ -17,26 +17,7 @@ export default function Sidebar() {
       { path: "/", label: "Dashboard", icon: <FaHome size={22} /> },
       {
         path: "/classrooms",
-        label: "My Classes",
-        icon: <FaChalkboardTeacher size={22} />,
-      },
-      {
-        path: "/assignments",
-        label: "Assignments",
-        icon: <FaTasks size={22} />,
-      },
-      {
-        path: "/materials",
-        label: "Materials",
-        icon: <FaFolderOpen size={22} />,
-      },
-    ],
-
-    student: [
-      { path: "/", label: "Dashboard", icon: <FaHome size={22} /> },
-      {
-        path: "/classrooms",
-        label: "Joined Classes",
+        label: "My Classrooms",
         icon: <FaChalkboardTeacher size={22} />,
       },
       {
@@ -46,7 +27,26 @@ export default function Sidebar() {
       },
       {
         path: "/materials",
-        label: "Materials",
+        label: "My Materials",
+        icon: <FaFolderOpen size={22} />,
+      },
+    ],
+
+    student: [
+      { path: "/", label: "Dashboard", icon: <FaHome size={22} /> },
+      {
+        path: "/classrooms",
+        label: "Joined Classrooms",
+        icon: <FaChalkboardTeacher size={22} />,
+      },
+      {
+        path: "/assignments",
+        label: "All Assignments",
+        icon: <FaTasks size={22} />,
+      },
+      {
+        path: "/materials",
+        label: "All Materials",
         icon: <FaFolderOpen size={22} />,
       },
     ],
