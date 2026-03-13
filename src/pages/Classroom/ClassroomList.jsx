@@ -13,6 +13,18 @@ export default function ClassroomList() {
   const { classrooms, loading } = useClassroom();
   const [copiedId, setCopiedId] = useState(null);
 
+  const [leaveDialog, setLeaveDialog] = useState({
+    open: false,
+    classId: null,
+    className: "",
+  });
+
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    classId: null,
+    className: "",
+  });
+
   const classroomImages = [
     "/images/1.jpg",
     "/images/2.jpg",
@@ -30,33 +42,61 @@ export default function ClassroomList() {
       </div>
     );
 
-  const handleDeleteClass = async (e, classId) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // const handleDeleteClass = async (e, classId) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
 
-    if (!confirm("Delete this classroom permanently?")) return;
+  //   if (!confirm("Delete this classroom permanently?")) return;
 
+  //   try {
+  //     await classroomService.deleteClassroom(classId);
+  //     toast.success("Classroom deleted");
+  //     window.location.reload();
+  //   } catch {
+  //     toast.error("Failed to delete classroom");
+  //   }
+  // };
+
+  const confirmDeleteClass = async () => {
     try {
-      await classroomService.deleteClassroom(classId);
+      await classroomService.deleteClassroom(deleteDialog.classId);
+
       toast.success("Classroom deleted");
+
       window.location.reload();
     } catch {
       toast.error("Failed to delete classroom");
+    } finally {
+      setDeleteDialog({ open: false, classId: null, className: "" });
     }
   };
 
-  const handleLeaveClass = async (e, classId) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // const handleLeaveClass = async (e, classId) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
 
-    if (!confirm("Leave this classroom?")) return;
+  //   if (!confirm("Leave this classroom?")) return;
 
+  //   try {
+  //     await classroomService.leaveClassroom(classId);
+  //     toast.success("You left the classroom");
+  //     window.location.reload();
+  //   } catch {
+  //     toast.error("Failed to leave classroom");
+  //   }
+  // };
+
+  const confirmLeaveClass = async () => {
     try {
-      await classroomService.leaveClassroom(classId);
+      await classroomService.leaveClassroom(leaveDialog.classId);
+
       toast.success("You left the classroom");
+
       window.location.reload();
     } catch {
       toast.error("Failed to leave classroom");
+    } finally {
+      setLeaveDialog({ open: false, classId: null, className: "" });
     }
   };
 
@@ -184,8 +224,24 @@ export default function ClassroomList() {
                     )}
                     {/* TEACHER DELETE */}
                     {user?.role === "teacher" && (
+                      // <button
+                      //   onClick={(e) => handleDeleteClass(e, c._id)}
+                      //   className="badge badge-error gap-2 cursor-pointer btn-circle btn-sm"
+                      //   title="Delete Classroom"
+                      // >
+                      //   <FaTrash />
+                      // </button>
                       <button
-                        onClick={(e) => handleDeleteClass(e, c._id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          setDeleteDialog({
+                            open: true,
+                            classId: c._id,
+                            className: c.name,
+                          });
+                        }}
                         className="badge badge-error gap-2 cursor-pointer btn-circle btn-sm"
                         title="Delete Classroom"
                       >
@@ -195,8 +251,24 @@ export default function ClassroomList() {
 
                     {/* STUDENT LEAVE */}
                     {user?.role === "student" && (
+                      // <button
+                      //   onClick={(e) => handleLeaveClass(e, c._id)}
+                      //   className="badge badge-warning gap-2 cursor-pointer btn-circle btn-sm"
+                      //   title="Leave Classroom"
+                      // >
+                      //   <FaSignOutAlt />
+                      // </button>
                       <button
-                        onClick={(e) => handleLeaveClass(e, c._id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          setLeaveDialog({
+                            open: true,
+                            classId: c._id,
+                            className: c.name,
+                          });
+                        }}
                         className="badge badge-warning gap-2 cursor-pointer btn-circle btn-sm"
                         title="Leave Classroom"
                       >
@@ -214,6 +286,66 @@ export default function ClassroomList() {
         <div className="text-center py-20 opacity-60">
           <FaUsers className="text-5xl mx-auto mb-4" />
           <p>No classrooms available</p>
+        </div>
+      )}
+
+      {/* ================= LEAVE CLASSROOM MODAL ================= */}
+
+      {leaveDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-warning">Leave Classroom</h3>
+
+            <p className="py-4">
+              Are you sure you want to leave <b>{leaveDialog.className}</b>?
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setLeaveDialog({ open: false, classId: null, className: "" })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-warning" onClick={confirmLeaveClass}>
+                Leave
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= DELETE CLASSROOM MODAL ================= */}
+
+      {deleteDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error">Delete Classroom</h3>
+
+            <p className="py-4">
+              Are you sure you want to delete <b>{deleteDialog.className}</b>?
+              <br />
+              This action cannot be undone.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setDeleteDialog({ open: false, classId: null, className: "" })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={confirmDeleteClass}>
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

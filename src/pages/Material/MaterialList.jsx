@@ -17,6 +17,12 @@ export default function MaterialList() {
 
   const [loading, setLoading] = useState(true);
 
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    materialId: null,
+    title: "",
+  });
+
   const classroomImages = [
     "/images/1.jpg",
     "/images/2.jpg",
@@ -53,23 +59,47 @@ export default function MaterialList() {
     loadMaterials();
   }, [classId, materialsByClass, setMaterialsByClass]);
 
-  const handleDelete = async (id) => {
-    if (!confirm("Delete this material?")) return;
+  // const handleDelete = async (id) => {
+  //   if (!confirm("Delete this material?")) return;
 
+  //   try {
+  //     await materialService.deleteMaterial(id);
+  //     toast.success("Material deleted");
+
+  //     // Update context immediately
+  //     setMaterialsByClass((prev) => {
+  //       const updated = { ...prev };
+  //       if (updated[classId]) {
+  //         updated[classId] = updated[classId].filter((m) => m._id !== id);
+  //       }
+  //       return updated;
+  //     });
+  //   } catch {
+  //     toast.error("Delete failed");
+  //   }
+  // };
+
+  const confirmDeleteMaterial = async () => {
     try {
-      await materialService.deleteMaterial(id);
+      await materialService.deleteMaterial(deleteDialog.materialId);
+
       toast.success("Material deleted");
 
-      // Update context immediately
       setMaterialsByClass((prev) => {
         const updated = { ...prev };
+
         if (updated[classId]) {
-          updated[classId] = updated[classId].filter((m) => m._id !== id);
+          updated[classId] = updated[classId].filter(
+            (m) => m._id !== deleteDialog.materialId
+          );
         }
+
         return updated;
       });
     } catch {
       toast.error("Delete failed");
+    } finally {
+      setDeleteDialog({ open: false, materialId: null, title: "" });
     }
   };
 
@@ -283,9 +313,18 @@ export default function MaterialList() {
 
                   {isTeacher && (
                     <button
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      //   handleDelete(m._id);
+                      // }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(m._id);
+
+                        setDeleteDialog({
+                          open: true,
+                          materialId: m._id,
+                          title: m.title,
+                        });
                       }}
                       className="btn btn-xs btn-error btn-circle"
                     >
@@ -352,6 +391,41 @@ export default function MaterialList() {
                   className="w-full max-h-[70vh]"
                 />
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= DELETE MATERIAL MODAL ================= */}
+
+      {deleteDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error flex items-center gap-2">
+              <MdDelete size={20} />
+              Delete Material
+            </h3>
+
+            <p className="py-4">
+              Are you sure you want to delete{" "}
+              <b>{deleteDialog.title || "this material"}</b> ?
+              <br />
+              This action cannot be undone.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setDeleteDialog({ open: false, materialId: null, title: "" })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={confirmDeleteMaterial}>
+                Delete
+              </button>
             </div>
           </div>
         </div>

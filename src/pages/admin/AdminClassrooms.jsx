@@ -17,6 +17,11 @@ export default function AdminClassrooms() {
   const [search, setSearch] = useState("");
   const [filterTeacher, setFilterTeacher] = useState("");
 
+  const [dialog, setDialog] = useState({
+    open: false,
+    classroom: null,
+  });
+
   // Fetch classrooms
   const loadClassrooms = async () => {
     try {
@@ -34,14 +39,30 @@ export default function AdminClassrooms() {
     loadClassrooms();
   }, []);
 
-  const handleDeleteClass = async (id) => {
-    if (!confirm("Delete this classroom permanently?")) return;
+  // const handleDeleteClass = async (id) => {
+  //   if (!confirm("Delete this classroom permanently?")) return;
+  //   try {
+  //     await adminService.deleteClassroom(id);
+  //     setClassrooms((prev) => prev.filter((c) => c._id !== id));
+  //     toast.success("Classroom deleted!");
+  //   } catch {
+  //     toast.error("Delete failed!");
+  //   }
+  // };
+
+  const confirmDeleteClass = async () => {
     try {
-      await adminService.deleteClassroom(id);
-      setClassrooms((prev) => prev.filter((c) => c._id !== id));
+      await adminService.deleteClassroom(dialog.classroom._id);
+
+      setClassrooms((prev) =>
+        prev.filter((c) => c._id !== dialog.classroom._id)
+      );
+
       toast.success("Classroom deleted!");
     } catch {
       toast.error("Delete failed!");
+    } finally {
+      setDialog({ open: false, classroom: null });
     }
   };
 
@@ -175,8 +196,19 @@ export default function AdminClassrooms() {
                     </span>
                   </td>
                   <td className="flex gap-2">
-                    <button
+                    {/* <button
                       onClick={() => handleDeleteClass(c._id)}
+                      className="btn btn-error btn-sm btn-circle"
+                    >
+                      <FaTrash />
+                    </button> */}
+                    <button
+                      onClick={() =>
+                        setDialog({
+                          open: true,
+                          classroom: c,
+                        })
+                      }
                       className="btn btn-error btn-sm btn-circle"
                     >
                       <FaTrash />
@@ -188,6 +220,36 @@ export default function AdminClassrooms() {
           </table>
         </div>
       </GlassCard>
+
+      {/* ================= DELETE MODAL ================= */}
+
+      {dialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error">Delete Classroom</h3>
+
+            <p className="py-4">
+              Are you sure you want to delete classroom{" "}
+              <b>{dialog.classroom?.name}</b>?
+              <br />
+              This action cannot be undone.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() => setDialog({ open: false, classroom: null })}
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={confirmDeleteClass}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -220,3 +282,5 @@ function GlassCard({ title, children }) {
     </div>
   );
 }
+
+

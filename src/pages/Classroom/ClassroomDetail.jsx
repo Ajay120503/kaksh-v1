@@ -36,6 +36,12 @@ export default function ClassroomDetail() {
   const [copied, setCopied] = useState(false);
   const [bgImage, setBgImage] = useState(classroomImages[0]);
 
+  const [banDialog, setBanDialog] = useState({
+    open: false,
+    studentId: null,
+    studentName: "",
+  });
+
   useEffect(() => {
     const random =
       classroomImages[Math.floor(Math.random() * classroomImages.length)];
@@ -62,27 +68,55 @@ export default function ClassroomDetail() {
     return () => (alive = false);
   }, [classId]);
 
-  const handleBanStudent = async (studentId) => {
-    if (!confirm("Ban this student from rejoining the classroom?")) return;
+  // const handleBanStudent = async (studentId) => {
+  //   if (!confirm("Ban this student from rejoining the classroom?")) return;
 
+  //   try {
+  //     await classroomService.banStudent(classId, studentId);
+  //     toast.success("Student banned successfully");
+
+  //     setClassroomsById((prev) => {
+  //       const cls = prev[classId] || {};
+  //       const student = cls.students.find((s) => s._id === studentId);
+  //       return {
+  //         ...prev,
+  //         [classId]: {
+  //           ...cls,
+  //           students: (cls.students || []).filter((s) => s._id !== studentId),
+  //           bannedStudents: [...(cls.bannedStudents || []), student],
+  //         },
+  //       };
+  //     });
+  //   } catch {
+  //     toast.error("Failed to ban student");
+  //   }
+  // };
+
+  const confirmBanStudent = async () => {
     try {
-      await classroomService.banStudent(classId, studentId);
+      await classroomService.banStudent(classId, banDialog.studentId);
+
       toast.success("Student banned successfully");
 
       setClassroomsById((prev) => {
         const cls = prev[classId] || {};
-        const student = cls.students.find((s) => s._id === studentId);
+        const student = cls.students.find((s) => s._id === banDialog.studentId);
+
         return {
           ...prev,
           [classId]: {
             ...cls,
-            students: (cls.students || []).filter((s) => s._id !== studentId),
+            students: (cls.students || []).filter(
+              (s) => s._id !== banDialog.studentId
+            ),
             bannedStudents: [...(cls.bannedStudents || []), student],
           },
         };
       });
     } catch {
       toast.error("Failed to ban student");
+    } finally {
+      setBanDialog({ open: false, studentId: null, studentName: "" });
     }
   };
 
@@ -304,7 +338,8 @@ export default function ClassroomDetail() {
         <StudentTable
           students={classroom.students}
           bannedStudents={classroom.bannedStudents}
-          handleBanStudent={handleBanStudent}
+          // handleBanStudent={handleBanStudent}
+          setBanDialog={setBanDialog}
           handleUnbanStudent={handleUnbanStudent}
         />
       )}
@@ -317,12 +352,50 @@ export default function ClassroomDetail() {
           handleUnbanStudent={handleUnbanStudent}
         />
       )}
+
+      {/* ================= BAN STUDENT MODAL ================= */}
+
+      {banDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-warning flex items-center gap-2">
+              <FaBan /> Ban Student
+            </h3>
+
+            <p className="py-4">
+              Are you sure you want to ban <b>{banDialog.studentName}</b> from
+              this classroom?
+              <br />
+              The student will not be able to rejoin unless unbanned.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setBanDialog({
+                    open: false,
+                    studentId: null,
+                    studentName: "",
+                  })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-warning" onClick={confirmBanStudent}>
+                Ban Student
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 /* ================= ACTIVE STUDENTS TABLE ================= */
-function StudentTable({ students, bannedStudents, handleBanStudent }) {
+function StudentTable({ students, bannedStudents, setBanDialog }) {
   if (!students?.length)
     return <p className="opacity-70 text-sm">No students have joined yet.</p>;
 
@@ -373,7 +446,14 @@ function StudentTable({ students, bannedStudents, handleBanStudent }) {
                     <button
                       className="btn btn-warning btn-sm btn-circle tooltip"
                       data-tip="Ban"
-                      onClick={() => handleBanStudent(stu._id)}
+                      // onClick={() => handleBanStudent(stu._id)}
+                      onClick={() =>
+                        setBanDialog({
+                          open: true,
+                          studentId: stu._id,
+                          studentName: stu.name,
+                        })
+                      }
                     >
                       <FaBan size={18} />
                     </button>
