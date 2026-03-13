@@ -11,6 +11,7 @@ export default function Profile() {
   const [edit, setEdit] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [passwordDialog, setPasswordDialog] = useState(false);
 
   // Password fields
   const [showPassword, setShowPassword] = useState(false);
@@ -50,11 +51,35 @@ export default function Profile() {
   };
 
   /* ================= UPDATE PASSWORD ================= */
-  const handlePasswordUpdate = async () => {
-    if (newPassword !== confirmPassword)
-      return toast.error("Passwords do not match");
+  // const handlePasswordUpdate = async () => {
+  //   if (newPassword !== confirmPassword)
+  //     return toast.error("Passwords do not match");
+
+  //   try {
+  //     await authService.updatePassword({
+  //       currentPassword,
+  //       newPassword,
+  //     });
+
+  //     setCurrentPassword("");
+  //     setNewPassword("");
+  //     setConfirmPassword("");
+  //     setShowPassword(false);
+
+  //     toast.success("Password updated securely");
+  //   } catch {
+  //     toast.error("Password update failed");
+  //   }
+  // };
+  const confirmPasswordUpdate = async () => {
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
     try {
+      setUpdating(true);
+
       await authService.updatePassword({
         currentPassword,
         newPassword,
@@ -64,10 +89,13 @@ export default function Profile() {
       setNewPassword("");
       setConfirmPassword("");
       setShowPassword(false);
+      setPasswordDialog(false);
 
       toast.success("Password updated securely");
     } catch {
       toast.error("Password update failed");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -213,10 +241,21 @@ export default function Profile() {
                 />
 
                 <div className="flex gap-2 pt-2">
-                  <button
+                  {/* <button
                     disabled={updating}
                     className="btn btn-primary btn-sm flex items-center gap-2"
                     onClick={handlePasswordUpdate}
+                  >
+                    {updating && (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    )}
+                    {updating ? "Updating..." : "Update Password"}
+                  </button> */}
+
+                  <button
+                    disabled={updating}
+                    className="btn btn-primary btn-sm flex items-center gap-2"
+                    onClick={() => setPasswordDialog(true)}
                   >
                     {updating && (
                       <span className="loading loading-spinner loading-sm"></span>
@@ -241,7 +280,36 @@ export default function Profile() {
           Kaksha Classroom — Secure Profile Settings
         </div>
       </div>
+      {/* ================= PASSWORD CONFIRM MODAL ================= */}
+
+      {passwordDialog && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-warning">
+              Confirm Password Change
+            </h3>
+
+            <p className="py-4">
+              Are you sure you want to change your password?
+              <br />
+              You will need to use the new password next time you log in.
+            </p>
+
+            <div className="modal-action">
+              <button className="btn" onClick={() => setPasswordDialog(false)}>
+                Cancel
+              </button>
+
+              <button
+                className="btn btn-warning"
+                onClick={confirmPasswordUpdate}
+              >
+                Confirm Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-
 }

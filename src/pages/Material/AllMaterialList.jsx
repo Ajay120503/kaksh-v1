@@ -69,6 +69,7 @@ export default function AllMaterialList() {
       return materialsArray.flat();
     } catch (error) {
       toast.error("Failed to load materials");
+      console.log(error);
       return [];
     } finally {
       setLoading(false);
