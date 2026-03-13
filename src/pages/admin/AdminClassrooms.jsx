@@ -258,7 +258,7 @@ export default function AdminClassrooms() {
 
 function SummaryCard({ title, value, icon, gradient, note }) {
   return (
-    <div className="relative overflow-hidden shadow-xl bg-base-100 border border-base-300 hover:-translate-y-1 transition">
+    <div className="relative overflow-hidden shadow-xl bg-base-100 border border-base-300">
       <div className={`h-2 bg-linear-to-r ${gradient}`} />
       <div className="p-6 flex items-center gap-4">
         <div className="p-4 rounded-2xl bg-base-200 text-3xl shadow-inner">
