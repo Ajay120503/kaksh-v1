@@ -16,6 +16,19 @@ export default function AllMaterialList() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    id: null,
+    title: "",
+  });
+
+  const [pinDialog, setPinDialog] = useState({
+    open: false,
+    id: null,
+    title: "",
+    isPinned: false,
+  });
+
   const classroomImages = [
     "/images/1.jpg",
     "/images/2.jpg",
@@ -76,20 +89,44 @@ export default function AllMaterialList() {
     refreshMaterials();
   };
 
-  const togglePin = async (id) => {
+  // const togglePin = async (id) => {
+  //   try {
+  //     await materialService.togglePin(id);
+  //     refreshMaterials();
+  //   } catch {
+  //     toast.error("Failed to update pin");
+  //   }
+  // };
+
+  const confirmTogglePin = async () => {
     try {
-      await materialService.togglePin(id);
+      await materialService.togglePin(pinDialog.id);
       refreshMaterials();
     } catch {
       toast.error("Failed to update pin");
+    } finally {
+      setPinDialog({ open: false, id: null, title: "", isPinned: false });
     }
   };
 
-  const deleteMaterial = async (id) => {
-    if (!confirm("Delete this material?")) return;
-    await materialService.deleteMaterial(id);
-    toast.success("Deleted");
-    refreshMaterials();
+  // const deleteMaterial = async (id) => {
+  //   if (!confirm("Delete this material?")) return;
+  //   await materialService.deleteMaterial(id);
+  //   toast.success("Deleted");
+  //   refreshMaterials();
+  // };
+
+  const confirmDeleteMaterial = async () => {
+    try {
+      await materialService.deleteMaterial(deleteDialog.id);
+      toast.success("Material deleted");
+
+      refreshMaterials();
+    } catch {
+      toast.error("Delete failed");
+    } finally {
+      setDeleteDialog({ open: false, id: null, title: "" });
+    }
   };
 
   useEffect(() => {
@@ -258,9 +295,20 @@ export default function AllMaterialList() {
                   {user?.role === "teacher" && (
                     <>
                       <button
+                        // onClick={(e) => {
+                        //   e.stopPropagation();
+                        //   togglePin(m._id);
+                        // }}
+
                         onClick={(e) => {
                           e.stopPropagation();
-                          togglePin(m._id);
+
+                          setPinDialog({
+                            open: true,
+                            id: m._id,
+                            title: m.title,
+                            isPinned: m.isPinned,
+                          });
                         }}
                         className="btn btn-xs btn-warning btn-circle"
                       >
@@ -268,9 +316,18 @@ export default function AllMaterialList() {
                       </button>
 
                       <button
+                        // onClick={(e) => {
+                        //   e.stopPropagation();
+                        //   deleteMaterial(m._id);
+                        // }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          deleteMaterial(m._id);
+
+                          setDeleteDialog({
+                            open: true,
+                            id: m._id,
+                            title: m.title,
+                          });
                         }}
                         className="btn btn-xs btn-error btn-circle"
                       >
@@ -306,6 +363,76 @@ export default function AllMaterialList() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {deleteDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error flex items-center gap-2">
+              <MdDelete /> Delete Material
+            </h3>
+
+            <p className="py-4">
+              Are you sure you want to delete
+              <br />
+              <b>{deleteDialog.title || "this material"}</b> ?
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setDeleteDialog({ open: false, id: null, title: "" })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={confirmDeleteMaterial}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {pinDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-warning flex items-center gap-2">
+              <FaThumbtack />{" "}
+              {pinDialog.isPinned ? "Unpin Material" : "Pin Material"}
+            </h3>
+
+            <p className="py-4">
+              {pinDialog.isPinned
+                ? "Remove this material from pinned list?"
+                : "Pin this material so it appears first?"}
+              <br />
+              <b>{pinDialog.title}</b>
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setPinDialog({
+                    open: false,
+                    id: null,
+                    title: "",
+                    isPinned: false,
+                  })
+                }
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-warning" onClick={confirmTogglePin}>
+                {pinDialog.isPinned ? "Unpin" : "Pin"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
