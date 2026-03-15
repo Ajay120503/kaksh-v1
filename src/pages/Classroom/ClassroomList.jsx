@@ -7,11 +7,14 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { FaTrash, FaSignOutAlt } from "react-icons/fa";
 import classroomService from "../../services/classroomService";
+import { MoreVertical } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ClassroomList() {
   const { user } = useAuth();
   const { classrooms, loading } = useClassroom();
   const [copiedId, setCopiedId] = useState(null);
+  const navigate = useNavigate();
 
   const [leaveDialog, setLeaveDialog] = useState({
     open: false,
@@ -132,12 +135,17 @@ export default function ClassroomList() {
       {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6"> */}
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {classrooms.map((c, index) => (
-          <Link
+          // <Link
+          //   key={c._id}
+          //   to={`/class/${c._id}`}
+          //   className="relative group block"
+          // >
+          <div
             key={c._id}
-            to={`/class/${c._id}`}
-            className="relative group block"
+            className="relative group block cursor-pointer"
+            onClick={() => navigate(`/class/${c._id}`)}
           >
-            <div className="border border-base-300 shadow-xl bg-base-100 overflow-hidden">
+            <div className="border border-base-300 shadow-xl bg-base-100">
               {/* Top Gradient Banner */}
               <div className="h-24 w-full bg-linear-to-r from-primary to-secondary relative">
                 <div className="absolute -bottom-10 left-6 z-10">
@@ -223,7 +231,7 @@ export default function ClassroomList() {
                       </span>
                     )}
                     {/* TEACHER DELETE */}
-                    {user?.role === "teacher" && (
+                    {/* {user?.role === "teacher" && (
                       // <button
                       //   onClick={(e) => handleDeleteClass(e, c._id)}
                       //   className="badge badge-error gap-2 cursor-pointer btn-circle btn-sm"
@@ -247,6 +255,36 @@ export default function ClassroomList() {
                       >
                         <FaTrash />
                       </button>
+                    )} */}
+                    {user?.role === "teacher" && (
+                      <div
+                        className="dropdown dropdown-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button className="btn btn-ghost btn-sm btn-circle">
+                          <MoreVertical size={16} />
+                        </button>
+
+                        <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40 border border-base-300 z-50">
+                          <li>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                setDeleteDialog({
+                                  open: true,
+                                  classId: c._id,
+                                  className: c.name,
+                                });
+                              }}
+                              className="flex items-center gap-2 text-error"
+                            >
+                              <FaTrash size={14} />
+                              Delete Class
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     )}
 
                     {/* STUDENT LEAVE */}
@@ -279,7 +317,7 @@ export default function ClassroomList() {
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
       {!classrooms.length && (
