@@ -55,7 +55,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <ul className="menu menu-md dropdown-content mt-3 shadow bg-base-100 rounded-box w-44">
+          <ul className="menu menu-md dropdown-content mt-3 shadow bg-base-100 border border-base-300 rounded-box w-44">
             <li>
               <Link to="/profile" className="flex items-center gap-2">
                 <FaUserCircle /> Profile
