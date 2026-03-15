@@ -5,7 +5,7 @@ import {
   deleteNotification,
 } from "../../services/notificationService";
 
-import { Trash2, Check, Bell } from "lucide-react";
+import { Trash2, Check, Bell, MoreVertical } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -87,7 +87,7 @@ export default function Notifications() {
   /* ================= UI ================= */
 
   return (
-    <div className="max-w-4xl mx-auto px-2">
+    <div className="max-w-4xl mx-auto">
       {/* HEADER */}
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-primary/10 p-3 rounded-lg">
@@ -162,25 +162,67 @@ export default function Notifications() {
               {/* ACTIONS */}
 
               <div
-                className="flex gap-2 opacity-0 group-hover:opacity-100 transition"
+                className="flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
-                {unread && (
-                  <button
-                    onClick={() => markRead(n._id)}
-                    className="btn btn-xs btn-success gap-1"
-                  >
-                    <Check size={14} />
-                    Read
-                  </button>
-                )}
+                {/* DESKTOP ACTIONS */}
 
-                <button
-                  onClick={() => remove(n._id)}
-                  className="btn btn-xs btn-error btn-circle"
-                >
-                  <Trash2 size={14} />
-                </button>
+                <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                  {unread && (
+                    <button
+                      onClick={() => markRead(n._id)}
+                      className="btn btn-xs btn-success gap-1"
+                    >
+                      <Check size={14} />
+                      Read
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => remove(n._id)}
+                    className="btn btn-xs btn-error btn-circle"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+
+                {/* MOBILE MENU */}
+
+                <div className="dropdown dropdown-end sm:hidden">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-sm btn-circle"
+                  >
+                    <MoreVertical size={16} />
+                  </label>
+
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300"
+                  >
+                    {unread && (
+                      <li>
+                        <button
+                          onClick={() => markRead(n._id)}
+                          className="text-success"
+                        >
+                          <Check size={14} />
+                          Mark Read
+                        </button>
+                      </li>
+                    )}
+
+                    <li>
+                      <button
+                        onClick={() => remove(n._id)}
+                        className="text-error"
+                      >
+                        <Trash2 size={14} />
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           );

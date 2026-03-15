@@ -38,7 +38,7 @@ export default function JoinRequests() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-2">
+    <div className="max-w-4xl mx-auto">
       {/* HEADER */}
 
       <div className="flex items-center gap-3 mb-6">

@@ -72,7 +72,7 @@ export default function AdminRoleRequests() {
   /* ================= UI ================= */
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
+    <div className="max-w-5xl mx-auto">
       {/* HEADER */}
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 rounded-xl bg-primary/10">
