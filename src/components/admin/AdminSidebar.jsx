@@ -40,7 +40,7 @@ export default function AdminSidebar() {
       <div className="flex items-center justify-between p-4 border-b border-base-300">
         {!collapsed && (
           <Link to="/120503" className="flex items-center gap-2">
-            <span className="text-2xl font-bold tracking-tighter">Admin</span>
+            <span className="text-2xl font-bold tracking-tighter">Kaksha</span>
           </Link>
         )}
 
