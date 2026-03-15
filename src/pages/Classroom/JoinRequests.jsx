@@ -43,7 +43,7 @@ export default function JoinRequests() {
 
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-primary/10 p-3 rounded-xl">
-          <FaUserClock className="text-xl text-primary" />
+          <FaUserClock className="text-primary text-2xl" />
         </div>
 
         <div>

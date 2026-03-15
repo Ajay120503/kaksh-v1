@@ -91,7 +91,7 @@ export default function Notifications() {
       {/* HEADER */}
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-primary/10 p-3 rounded-lg">
-          <Bell size={20} className="text-primary" />
+          <Bell className="text-primary text-2xl" />
         </div>
 
         <div>
