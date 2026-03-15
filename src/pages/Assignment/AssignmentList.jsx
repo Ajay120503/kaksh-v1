@@ -30,6 +30,12 @@ export default function AssignmentList() {
   const [sort, setSort] = useState("nearest");
   const [preview, setPreview] = useState(null);
 
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    id: null,
+    title: "",
+  });
+
   const classroomImages = [
     "/images/1.jpg",
     "/images/4.jpg",
@@ -75,20 +81,37 @@ export default function AssignmentList() {
     }
   }, [classId]);
 
-  const deleteAssignment = async (id) => {
-    if (!confirm("Delete assignment?")) return;
+  // const deleteAssignment = async (id) => {
+  //   if (!confirm("Delete assignment?")) return;
 
+  //   try {
+  //     await assignmentService.deleteAssignment(id);
+
+  //     setAssignmentsByClass((prev) => ({
+  //       ...prev,
+  //       [classId]: prev[classId]?.filter((a) => a._id !== id),
+  //     }));
+
+  //     toast.success("Assignment deleted");
+  //   } catch {
+  //     toast.error("Delete failed");
+  //   }
+  // };
+
+  const confirmDeleteAssignment = async () => {
     try {
-      await assignmentService.deleteAssignment(id);
+      await assignmentService.deleteAssignment(deleteDialog.id);
 
       setAssignmentsByClass((prev) => ({
         ...prev,
-        [classId]: prev[classId]?.filter((a) => a._id !== id),
+        [classId]: prev[classId]?.filter((a) => a._id !== deleteDialog.id),
       }));
 
       toast.success("Assignment deleted");
     } catch {
       toast.error("Delete failed");
+    } finally {
+      setDeleteDialog({ open: false, id: null, title: "" });
     }
   };
 
@@ -338,9 +361,18 @@ export default function AssignmentList() {
                         </button>
 
                         <button
+                          // onClick={(e) => {
+                          //   e.stopPropagation();
+                          //   deleteAssignment(a._id);
+                          // }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            deleteAssignment(a._id);
+
+                            setDeleteDialog({
+                              open: true,
+                              id: a._id,
+                              title: a.title,
+                            });
                           }}
                           className="btn btn-error btn-xs btn-circle"
                         >
@@ -355,6 +387,44 @@ export default function AssignmentList() {
           );
         })}
       </div>
+
+      {/* ================= DELETE ASSIGNMENT MODAL ================= */}
+
+      {deleteDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error flex items-center gap-2">
+              <MdDelete /> Delete Assignment
+            </h3>
+
+            <p className="py-4">
+              Are you sure you want to delete
+              <br />
+              <b>{deleteDialog.title || "this assignment"}</b> ?
+              <br />
+              This action cannot be undone.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() =>
+                  setDeleteDialog({ open: false, id: null, title: "" })
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                className="btn btn-error"
+                onClick={confirmDeleteAssignment}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 🔍 PREVIEW MODAL */}
       {preview && (
