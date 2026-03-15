@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import adminService from "../../services/adminService";
 import AdminHero from "./AdminHero";
+import { MdMoreVert } from "react-icons/md";
 
 export default function AdminClassrooms() {
   const [classrooms, setClassrooms] = useState([]);
@@ -195,24 +196,34 @@ export default function AdminClassrooms() {
                       )}
                     </span>
                   </td>
-                  <td className="flex gap-2">
-                    {/* <button
-                      onClick={() => handleDeleteClass(c._id)}
-                      className="btn btn-error btn-sm btn-circle"
-                    >
-                      <FaTrash />
-                    </button> */}
-                    <button
-                      onClick={() =>
-                        setDialog({
-                          open: true,
-                          classroom: c,
-                        })
-                      }
-                      className="btn btn-error btn-sm btn-circle"
-                    >
-                      <FaTrash />
-                    </button>
+                  <td className="flex justify-end">
+                    <div className="dropdown dropdown-end">
+                      <label
+                        tabIndex={0}
+                        className="btn btn-ghost btn-sm btn-circle"
+                      >
+                        <MdMoreVert size={18} />
+                      </label>
+
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300"
+                      >
+                        <li>
+                          <button
+                            onClick={() =>
+                              setDialog({
+                                open: true,
+                                classroom: c,
+                              })
+                            }
+                            className="text-error"
+                          >
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   </td>
                 </tr>
               ))}
