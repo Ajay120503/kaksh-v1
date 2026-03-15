@@ -89,9 +89,9 @@ export default function AdminRoleRequests() {
 
       {/* EMPTY STATE */}
       {requests.length === 0 && (
-        <div className="text-center py-20 opacity-60">
-          <p className="text-lg font-medium">No role requests available</p>
-          <p className="text-sm">Teacher requests will appear here</p>
+        <div className="flex flex-col items-center justify-center py-16 opacity-70">
+          <FaUserShield size={40} />
+          <p className="mt-3 text-sm">No role requests available</p>
         </div>
       )}
 
