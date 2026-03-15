@@ -4,10 +4,26 @@ import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import NotificationButton from "../../components/NotificationButton";
 import { UserPlus } from "lucide-react";
+import adminService from "../../services/adminService";
+import { useEffect, useState } from "react";
 
 export default function AdminNavbar() {
   const { user, logout } = useAuth();
+  const [requestCount, setRequestCount] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadCount = async () => {
+      try {
+        const { data } = await adminService.getRoleRequestCount();
+        setRequestCount(data.count || 0);
+      } catch (err) {
+        console.error("Role request count error:", err);
+      }
+    };
+
+    loadCount();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -28,12 +44,35 @@ export default function AdminNavbar() {
       {/* RIGHT */}
       <div className="flex-none flex items-center gap-1">
         <NotificationButton />
-        <div className="tooltip  tooltip-left" data-tip="See Request">
+        <div className="tooltip tooltip-left" data-tip="See Requests">
           <Link
             to="/120503/role-requests"
-            className="btn btn-circle hover:bg-base-300 btn-ghost"
+            className="
+      relative
+      btn btn-ghost btn-circle
+      hover:bg-base-300
+      transition-all duration-200
+    "
           >
             <UserPlus size={20} />
+
+            {/* REQUEST BADGE */}
+            {requestCount > 0 && (
+              <span
+                className="
+          absolute -top-1 -right-1
+          min-w-4.5 h-4.5
+          px-1
+          flex items-center justify-center
+          text-[10px] font-bold
+          rounded-full
+          bg-primary text-white
+          shadow-md
+        "
+              >
+                {requestCount > 99 ? "99+" : requestCount}
+              </span>
+            )}
           </Link>
         </div>
         {/* USER DROPDOWN */}

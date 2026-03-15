@@ -58,11 +58,11 @@ export default function JoinRequests() {
       )}
 
       {/* NOTIFICATION FEED */}
-      <div className="space-y-4">
+      <div className="space-y-1">
         {requests.map((r) => (
           <div
             key={r._id}
-            className="group relative flex gap-4 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
+            className="group relative flex gap-2 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
           >
             {/* STATUS SIDE BAR */}
             <div

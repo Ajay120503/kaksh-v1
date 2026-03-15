@@ -398,8 +398,7 @@ export default function AssignmentList() {
             </h3>
 
             <p className="py-4">
-              Are you sure you want to delete
-              <br />
+              Are you sure you want to delete{" "}
               <b>{deleteDialog.title || "this assignment"}</b> ?
               <br />
               This action cannot be undone.
