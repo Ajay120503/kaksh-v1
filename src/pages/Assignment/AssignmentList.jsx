@@ -13,6 +13,7 @@ import {
 import { MdDelete } from "react-icons/md";
 import { useAssignment } from "../../context/AssignmentContext";
 import { GrDocumentNotes } from "react-icons/gr";
+import { MoreVertical } from "lucide-react";
 
 export default function AssignmentList() {
   const { classId } = useParams();
@@ -263,7 +264,7 @@ export default function AssignmentList() {
             <div
               key={a._id}
               onClick={() => navigate(`/assignment/submission/${a._id}`)}
-              className="group relative h-70 overflow-hidden border-2 border-base-300 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer bg-base-100"
+              className="group relative h-70 border-2 border-base-300 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer bg-base-100"
               style={{
                 backgroundImage: `url(${
                   classroomImages[i % classroomImages.length]
@@ -285,7 +286,7 @@ export default function AssignmentList() {
                 <GrDocumentNotes size={16} /> Assignment
               </span>
               {/* Content */}
-              <div className="relative z-20 h-full flex flex-col justify-between p-5 text-white">
+              <div className="z-20 h-full flex flex-col justify-between p-5 text-white">
                 {/* Title */}
                 <div className="backdrop-blur-md bg-black/40 rounded-xl p-4">
                   <h2 className="text-lg font-bold line-clamp-2">{a.title}</h2>
@@ -320,7 +321,7 @@ export default function AssignmentList() {
   "
                   >
                     {user?.role === "student" && file && (
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 z-30">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -348,7 +349,7 @@ export default function AssignmentList() {
                       </div>
                     )}
 
-                    {user?.role === "teacher" && (
+                    {/* {user?.role === "teacher" && (
                       <>
                         <button
                           onClick={(e) => {
@@ -379,6 +380,54 @@ export default function AssignmentList() {
                           <MdDelete size={16} />
                         </button>
                       </>
+                    )} */}
+                    {user?.role === "teacher" && (
+                      <div
+                        className="dropdown dropdown-end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {/* Three Dot Button */}
+                        <label
+                          tabIndex={0}
+                          className="btn btn-ghost btn-sm btn-circle"
+                        >
+                          <MoreVertical size={16} />
+                        </label>
+
+                        {/* Dropdown Menu */}
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32 border border-base-300 z-100"
+                        >
+                          <li>
+                            <button
+                              onClick={() =>
+                                navigate(`/assignments/edit/${a._id}`)
+                              }
+                              className="flex items-center gap-2"
+                            >
+                              <FaPen size={14} />
+                              Edit
+                            </button>
+                          </li>
+
+                          <li>
+                            <button
+                              onClick={() =>
+                                setDeleteDialog({
+                                  open: true,
+                                  id: a._id,
+                                  title: a.title,
+                                })
+                              }
+                              className="text-error flex items-center gap-2"
+                            >
+                              <MdDelete size={14} />
+                              Delete
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     )}
                   </div>
                 </div>

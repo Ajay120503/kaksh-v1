@@ -10,6 +10,7 @@ import { MdDelete } from "react-icons/md";
 import { usePost } from "../../context/PostContext";
 import hljs from "highlight.js";
 import { FaCopy, FaCheck, FaRegCommentDots } from "react-icons/fa";
+import { MoreVertical } from "lucide-react";
 
 export default function PostList() {
   const { classId } = useParams();
@@ -416,7 +417,7 @@ export default function PostList() {
               </div>
 
               {/* Teacher actions */}
-              {user.role === "teacher" && editPostId === null && (
+              {/* {user.role === "teacher" && editPostId === null && (
                 <div className="flex gap-2">
                   <button
                     className="btn btn-xs btn-outline btn-circle"
@@ -430,6 +431,48 @@ export default function PostList() {
                   >
                     <MdDelete fontSize={16} />
                   </button>
+                </div>
+              )} */}
+              {user.role === "teacher" && editPostId === null && (
+                <div
+                  className="dropdown dropdown-end"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* 3 Dot Button */}
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-sm btn-circle"
+                  >
+                    <MoreVertical size={16} />
+                  </label>
+
+                  {/* Dropdown Menu */}
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300 z-50"
+                  >
+                    {/* Edit */}
+                    <li>
+                      <button
+                        onClick={() => startEdit(post)}
+                        className="flex items-center gap-2"
+                      >
+                        <FaPen size={14} />
+                        Edit
+                      </button>
+                    </li>
+
+                    {/* Delete */}
+                    <li>
+                      <button
+                        onClick={() => handleDelete(post._id)}
+                        className="flex items-center gap-2 text-error"
+                      >
+                        <MdDelete size={16} />
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
