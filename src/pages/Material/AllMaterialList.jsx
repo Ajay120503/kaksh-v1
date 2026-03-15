@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaThumbtack, FaSearch, FaDownload } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useMaterial } from "../../context/MaterialContext";
+import { MoreVertical } from "lucide-react";
 
 export default function AllMaterialList() {
   const { user } = useAuth();
@@ -239,21 +240,23 @@ export default function AllMaterialList() {
               onClick={() => handleView(m)}
             >
               {/* IMAGE / PREVIEW */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={m?.file}
-                  alt="Material"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
-                      classroomImages[index % classroomImages.length];
-                  }}
-                  className="
-            w-full object-cover
-            transition-transform duration-300
-            group-hover:scale-105
-          "
-                />
+              <div className="relative">
+                <div className="relative overflow-hidden">
+                  <img
+                    src={m?.file}
+                    alt="Material"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        classroomImages[index % classroomImages.length];
+                    }}
+                    className="
+                          w-full object-cover
+                          transition-transform duration-300
+                          group-hover:scale-105
+                        "
+                  />
+                </div>
 
                 {/* PIN BADGE */}
                 {m.isPinned && (
@@ -268,10 +271,8 @@ export default function AllMaterialList() {
             absolute inset-0
             bg-black/40
             flex items-end justify-end gap-3 p-3
-
             opacity-100
             md:opacity-0 md:group-hover:opacity-100
-
             transition-opacity duration-300
           "
                 >
@@ -293,7 +294,7 @@ export default function AllMaterialList() {
                   )}
 
                   {/* Teacher Actions */}
-                  {user?.role === "teacher" && (
+                  {/* {user?.role === "teacher" && (
                     <>
                       <button
                         // onClick={(e) => {
@@ -335,6 +336,61 @@ export default function AllMaterialList() {
                         <MdDelete size={16} />
                       </button>
                     </>
+                  )} */}
+                  {user?.role === "teacher" && (
+                    <div
+                      className="dropdown dropdown-end"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {/* 3-dot button */}
+                      <label
+                        tabIndex={0}
+                        className="btn btn-ghost btn-sm btn-circle"
+                      >
+                        <MoreVertical size={16} />
+                      </label>
+
+                      {/* Dropdown menu */}
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40 border border-base-300 z-50"
+                      >
+                        {/* Pin / Unpin */}
+                        <li>
+                          <button
+                            onClick={() =>
+                              setPinDialog({
+                                open: true,
+                                id: m._id,
+                                title: m.title,
+                                isPinned: m.isPinned,
+                              })
+                            }
+                            className="flex items-center gap-2"
+                          >
+                            <FaThumbtack size={14} />
+                            {m.isPinned ? "Unpin" : "Pin"}
+                          </button>
+                        </li>
+
+                        {/* Delete */}
+                        <li>
+                          <button
+                            onClick={() =>
+                              setDeleteDialog({
+                                open: true,
+                                id: m._id,
+                                title: m.title,
+                              })
+                            }
+                            className="flex items-center gap-2 text-error"
+                          >
+                            <MdDelete size={16} />
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   )}
                 </div>
               </div>

@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { MdDelete, MdClose } from "react-icons/md";
 import { useMaterial } from "../../context/MaterialContext";
 import { FaDownload, FaEye, FaSearch } from "react-icons/fa";
+import { MoreVertical } from "lucide-react";
 
 export default function MaterialList() {
   const { classId } = useParams();
@@ -263,37 +264,34 @@ export default function MaterialList() {
         "
             >
               {/* IMAGE / PREVIEW */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={m?.file}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
-                      classroomImages[index % classroomImages.length];
-                  }}
-                  alt="Material"
-                  className="
+              <div className="relative">
+                <div className="relative overflow-hidden">
+                  <img
+                    src={m?.file}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        classroomImages[index % classroomImages.length];
+                    }}
+                    alt="Material"
+                    className="
               w-full object-cover
               transition-transform duration-200
               group-hover:scale-105
             "
-                />
+                  />
+                </div>
 
                 {/* ACTION OVERLAY */}
                 <div
                   className="
-    absolute inset-0
-    bg-black/40
-    flex items-end justify-end gap-3 p-3
-
-    /* Mobile: always visible */
-    opacity-100
-
-    /* Desktop: hover based */
-    md:opacity-0 md:group-hover:opacity-100
-
-    transition-opacity duration-300
-  "
+                            absolute inset-0
+                            bg-black/40
+                            flex items-end justify-end gap-3 p-3
+                            opacity-100
+                            md:opacity-0 md:group-hover:opacity-100
+                            transition-opacity duration-300
+                          "
                 >
                   {user?.role === "student" && (
                     <a
@@ -311,7 +309,7 @@ export default function MaterialList() {
                     </a>
                   )}
 
-                  {isTeacher && (
+                  {/* {isTeacher && (
                     <button
                       // onClick={(e) => {
                       //   e.stopPropagation();
@@ -330,6 +328,42 @@ export default function MaterialList() {
                     >
                       <MdDelete size={16} />
                     </button>
+                  )} */}
+                  {isTeacher && (
+                    <div
+                      className="dropdown dropdown-end"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {/* 3-dot button */}
+                      <label
+                        tabIndex={0}
+                        className="btn btn-ghost btn-sm btn-circle"
+                      >
+                        <MoreVertical size={16} />
+                      </label>
+
+                      {/* Dropdown menu */}
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300 z-50"
+                      >
+                        <li>
+                          <button
+                            onClick={() =>
+                              setDeleteDialog({
+                                open: true,
+                                materialId: m._id,
+                                title: m.title,
+                              })
+                            }
+                            className="flex items-center gap-2 text-error"
+                          >
+                            <MdDelete size={16} />
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   )}
                 </div>
               </div>
