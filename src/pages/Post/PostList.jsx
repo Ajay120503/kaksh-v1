@@ -89,33 +89,45 @@ export default function PostList() {
   }, [classId, postsByClass, setPostsByClass]);
 
   // Upload file for create post
-  const uploadFile = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
+  // const uploadFile = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   const formData = new FormData();
+  //   formData.append("file", file);
 
-    try {
-      const res = await api.post("/upload/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      setAttachments((prev) => [
-        ...prev,
-        {
-          url: res.data.fileUrl,
-          filename: res.data.fileUrl.split("/").pop(),
-        },
-      ]);
-      console.log("UPLOAD RESPONSE:", res.data);
+  //   try {
+  //     const res = await api.post("/upload/upload", formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `Bearer ${user?.token}`,
+  //       },
+  //     });
+  //     setAttachments((prev) => [
+  //       ...prev,
+  //       {
+  //         url: res.data.fileUrl,
+  //         filename: res.data.fileUrl.split("/").pop(),
+  //       },
+  //     ]);
+  //     console.log("UPLOAD RESPONSE:", res.data);
 
-      toast.success("File uploaded successfully");
-    } catch (err) {
-      console.error(err);
-      toast.error("File upload failed");
-    }
+  //     toast.success("File uploaded successfully");
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("File upload failed");
+  //   }
+  // };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (!files.length) return;
+
+    setAttachments((prev) => [...prev, ...files]);
+  };
+
+  const removeAttachment = (index) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleCreate = async (e) => {
@@ -128,9 +140,35 @@ export default function PostList() {
     try {
       setPostLoading(true);
 
+      // await postService.createPost(classId, {
+      //   text: newText,
+      //   attachments,
+      //   isCode,
+      //   language: isCode ? language : null,
+      // });
+
+      let uploadedFiles = [];
+
+      for (const file of attachments) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await api.post("/upload/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+
+        uploadedFiles.push({
+          url: res.data.fileUrl,
+          filename: file.name,
+        });
+      }
+
       await postService.createPost(classId, {
         text: newText,
-        attachments,
+        attachments: uploadedFiles,
         isCode,
         language: isCode ? language : null,
       });
@@ -268,17 +306,53 @@ export default function PostList() {
             </div>
 
             {/* Attachments */}
-            <div className="flex justify-between items-center">
-              <input
+            <div className="flex justify-between items-start flex-col">
+              {/* <input
                 type="file"
                 ref={fileInputRef}
                 className="file-input file-input-bordered file-input-sm"
                 onChange={uploadFile}
+              /> */}
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                multiple
+                className="file-input file-input-bordered file-input-sm"
+                onChange={handleFileSelect}
               />
-              {attachments.length > 0 && (
+
+              {/* {attachments.length > 0 && (
                 <span className="text-sm opacity-70">
                   {attachments.length} file(s) attached
                 </span>
+              )} */}
+
+              {attachments.length > 0 && (
+                <div className="bg-base-200 p-3 w-full max-h-50 overflow-y-scroll rounded-lg mt-2">
+                  <p className="text-sm font-semibold mb-2">
+                    Selected Files ({attachments.length})
+                  </p>
+
+                  <div className="space-y-2">
+                    {attachments.map((file, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between bg-base-100 border border-base-300 px-3 py-2 rounded"
+                      >
+                        <span className="text-sm truncate">{file.name}</span>
+
+                        <button
+                          type="button"
+                          onClick={() => removeAttachment(index)}
+                          className="btn btn-xs btn-error"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
 

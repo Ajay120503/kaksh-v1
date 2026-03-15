@@ -15,9 +15,9 @@ export default function CreateAssignment() {
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [maxMarks, setMaxMarks] = useState("");
-  const [attachments, setAttachments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [uploadingFile, setUploadingFile] = useState(false);
+  const [attachment, setAttachment] = useState(null);
+  const [uploadingFile] = useState(false);
 
   const { setAssignmentsByClass } = useAssignment();
 
@@ -31,29 +31,50 @@ export default function CreateAssignment() {
     );
   }
 
-  const uploadFile = async (e) => {
+  // const uploadFile = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+
+  //   try {
+  //     setUploadingFile(true);
+  //     const res = await api.post("/upload/upload", formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `Bearer ${user?.token}`,
+  //       },
+  //     });
+
+  //     setAttachments((prev) => [...prev, res.data.fileUrl]);
+  //     toast.success("File uploaded successfully");
+  //   } catch {
+  //     toast.error("File upload failed");
+  //   } finally {
+  //     setUploadingFile(false);
+  //   }
+  // };
+
+  // const handleFileSelect = (e) => {
+  //   const files = Array.from(e.target.files);
+
+  //   setAttachments((prev) => [...prev, ...files]);
+  // };
+
+  const handleFileSelect = (e) => {
     const file = e.target.files[0];
+
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
+    setAttachment(file);
+  };
 
-    try {
-      setUploadingFile(true);
-      const res = await api.post("/upload/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-
-      setAttachments((prev) => [...prev, res.data.fileUrl]);
-      toast.success("File uploaded successfully");
-    } catch {
-      toast.error("File upload failed");
-    } finally {
-      setUploadingFile(false);
-    }
+  // const removeFile = (index) => {
+  //   setAttachments((prev) => prev.filter((_, i) => i !== index));
+  // };
+  const removeFile = () => {
+    setAttachment(null);
   };
 
   // const handleSubmit = async (e) => {
@@ -64,7 +85,7 @@ export default function CreateAssignment() {
   //   setLoading(true);
 
   //   try {
-  //     await assignmentService.createAssignment({
+  //     const newAssignment = await assignmentService.createAssignment({
   //       classId,
   //       title: title.trim(),
   //       description: description?.trim(),
@@ -72,6 +93,60 @@ export default function CreateAssignment() {
   //       ...(maxMarks !== "" && { maxMarks: Number(maxMarks) }),
   //       attachments: attachments.filter(Boolean),
   //     });
+
+  //     setAssignmentsByClass((prev) => ({
+  //       ...prev,
+  //       [classId]: [newAssignment, ...(prev[classId] || [])],
+  //     }));
+
+  //     toast.success("Assignment created successfully!");
+  //     navigate(`/assignments/${classId}`);
+  //   } catch (err) {
+  //     toast.error(err?.response?.data?.msg || "Failed to create assignment");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!title || !deadline) {
+  //     return toast.error("Fill required fields");
+  //   }
+
+  //   setLoading(true);
+
+  //   try {
+  //     let uploadedUrls = [];
+
+  //     for (let file of attachments) {
+  //       const formData = new FormData();
+  //       formData.append("file", file);
+
+  //       const res = await api.post("/upload/upload", formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${user?.token}`,
+  //         },
+  //       });
+
+  //       uploadedUrls.push(res.data.fileUrl);
+  //     }
+
+  //     const newAssignment = await assignmentService.createAssignment({
+  //       classId,
+  //       title: title.trim(),
+  //       description: description?.trim(),
+  //       deadline,
+  //       ...(maxMarks !== "" && { maxMarks: Number(maxMarks) }),
+  //       attachments: uploadedUrls,
+  //     });
+
+  //     setAssignmentsByClass((prev) => ({
+  //       ...prev,
+  //       [classId]: [newAssignment, ...(prev[classId] || [])],
+  //     }));
 
   //     toast.success("Assignment created successfully!");
   //     navigate(`/assignments/${classId}`);
@@ -84,19 +159,37 @@ export default function CreateAssignment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!title || !deadline) {
       return toast.error("Fill required fields");
     }
+
     setLoading(true);
 
     try {
+      let fileUrl = null;
+
+      if (attachment) {
+        const formData = new FormData();
+        formData.append("file", attachment);
+
+        const res = await api.post("/upload/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+
+        fileUrl = res.data.fileUrl;
+      }
+
       const newAssignment = await assignmentService.createAssignment({
         classId,
         title: title.trim(),
         description: description?.trim(),
         deadline,
         ...(maxMarks !== "" && { maxMarks: Number(maxMarks) }),
-        attachments: attachments.filter(Boolean),
+        ...(fileUrl && { attachments: [fileUrl] }),
       });
 
       setAssignmentsByClass((prev) => ({
@@ -196,10 +289,23 @@ export default function CreateAssignment() {
                 </span>
               </label>
 
-              <input
+              {/* <input
                 type="file"
                 className="file-input file-input-bordered w-full"
                 onChange={uploadFile}
+              /> */}
+
+              {/* <input
+                type="file"
+                multiple
+                className="file-input file-input-bordered w-full"
+                onChange={handleFileSelect}
+              /> */}
+
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full"
+                onChange={handleFileSelect}
               />
 
               {uploadingFile && (
@@ -211,7 +317,7 @@ export default function CreateAssignment() {
             </div>
 
             {/* Attachment Preview */}
-            {attachments.length > 0 && (
+            {/* {attachments.length > 0 && (
               <div className="bg-base-300 rounded-xl p-4">
                 <h3 className="font-semibold mb-3">Attached Files</h3>
                 <div className="flex flex-wrap gap-2">
@@ -223,6 +329,47 @@ export default function CreateAssignment() {
                       File {i + 1}
                     </span>
                   ))}
+                </div>
+              </div>
+            )} */}
+            {/* {attachments.length > 0 && (
+              <div className="bg-base-200 rounded-xl p-4 overflow-y-scroll max-h-50">
+                <h3 className="font-semibold mb-3">Selected Files</h3>
+
+                <div className="space-y-2">
+                  {attachments.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-base-100 border border-base-300 rounded-lg px-3 py-2"
+                    >
+                      <span className="text-sm truncate">{file.name}</span>
+
+                      <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="btn btn-xs btn-error"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )} */}
+            {attachment && (
+              <div className="bg-base-200 rounded-xl p-4">
+                <h3 className="font-semibold mb-3">Selected File</h3>
+
+                <div className="flex items-center justify-between bg-base-100 border border-base-300 rounded-lg px-3 py-2">
+                  <span className="text-sm truncate">{attachment.name}</span>
+
+                  <button
+                    type="button"
+                    onClick={removeFile}
+                    className="btn btn-xs btn-error"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             )}
