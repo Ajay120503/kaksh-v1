@@ -16,6 +16,7 @@ export default function Notifications() {
   const navigate = useNavigate();
 
   /* ================= LOAD ================= */
+
   const loadNotifications = async () => {
     try {
       const data = await getNotifications();
@@ -30,6 +31,7 @@ export default function Notifications() {
   }, []);
 
   /* ================= MARK READ ================= */
+
   const markRead = async (id) => {
     try {
       await markNotificationRead(id);
@@ -37,7 +39,6 @@ export default function Notifications() {
       setNotifications((prev) =>
         prev.map((n) => {
           if (n._id === id) {
-            // update recipients immutably
             const updatedRecipients = n.recipients.map((r) =>
               String(r.user) === String(user._id) ? { ...r, read: true } : r
             );
@@ -46,12 +47,13 @@ export default function Notifications() {
           return n;
         })
       );
-    } catch (err) {
+    } catch {
       toast.error("Failed to mark as read");
     }
   };
 
   /* ================= DELETE ================= */
+
   const remove = async (id) => {
     try {
       await deleteNotification(id);
@@ -63,12 +65,11 @@ export default function Notifications() {
   };
 
   /* ================= REDIRECT ================= */
+
   const handleRedirect = async (notification) => {
     try {
-      // mark read first (updates UI automatically)
       await markRead(notification._id);
 
-      // redirect
       if (notification.link) {
         navigate(notification.link);
       }
@@ -77,27 +78,42 @@ export default function Notifications() {
     }
   };
 
-  /* ================= ROLE FILTER ================= */
+  /* ================= FILTER ================= */
+
   const roleNotifications = notifications.filter((n) =>
     n.recipients.some((r) => r.role === user.role)
   );
 
   /* ================= UI ================= */
+
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-6">
-        <Bell className="text-primary" />
-        <h1 className="text-2xl font-bold">Notifications</h1>
+    <div className="max-w-4xl mx-auto px-2">
+      {/* HEADER */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-primary/10 p-3 rounded-lg">
+          <Bell size={20} className="text-primary" />
+        </div>
+
+        <div>
+          <h1 className="text-2xl font-bold">Notifications</h1>
+          <p className="text-sm opacity-60">
+            Stay updated with classroom activities
+          </p>
+        </div>
       </div>
 
+      {/* EMPTY STATE */}
+
       {roleNotifications.length === 0 && (
-        <div className="alert">
-          <span>No notifications available</span>
+        <div className="flex flex-col items-center justify-center py-16 opacity-70">
+          <Bell size={40} />
+          <p className="mt-3 text-sm">No notifications yet</p>
         </div>
       )}
 
-      <div className="space-y-4">
+      {/* LIST */}
+
+      <div className="space-y-3">
         {roleNotifications.map((n) => {
           const myRecipient = n.recipients.find(
             (r) => String(r.user) === String(user._id)
@@ -110,48 +126,61 @@ export default function Notifications() {
               key={n._id}
               onClick={() => handleRedirect(n)}
               className={`
-                card border cursor-pointer
-                hover:shadow-lg hover:bg-base-300
+                group
+                flex items-start gap-4
+                p-4 rounded-xl border
+                transition-all duration-200
+                cursor-pointer
+                hover:shadow-md hover:bg-base-200
                 ${
                   unread
-                    ? "bg-primary/10 border-primary"
+                    ? "bg-primary/5 border-primary/30"
                     : "bg-base-100 border-base-300"
                 }
               `}
             >
-              <div className="card-body p-4 flex-row justify-between items-start">
-                {/* CONTENT */}
-                <div className="flex-1">
-                  <h3 className="font-semibold text-base-content">{n.title}</h3>
+              {/* UNREAD DOT */}
 
-                  <p className="text-sm opacity-70 mt-1">{n.message}</p>
+              <div className="mt-1">
+                {unread && (
+                  <span className="w-2.5 h-2.5 bg-primary rounded-full block"></span>
+                )}
+              </div>
 
-                  <span className="text-xs opacity-50">
-                    {new Date(n.createdAt).toLocaleString()}
-                  </span>
-                </div>
+              {/* CONTENT */}
 
-                {/* ACTION BUTTONS */}
-                <div
-                  className="flex gap-2 ml-3"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {unread && (
-                    <button
-                      onClick={() => markRead(n._id)}
-                      className="btn btn-success btn-xs"
-                    >
-                      {/* <Check size={14} /> */} Mark as Read
-                    </button>
-                  )}
+              <div className="flex-1">
+                <h3 className="font-semibold">{n.title}</h3>
 
+                <p className="text-sm opacity-70 mt-1">{n.message}</p>
+
+                <span className="text-xs opacity-50">
+                  {new Date(n.createdAt).toLocaleString()}
+                </span>
+              </div>
+
+              {/* ACTIONS */}
+
+              <div
+                className="flex gap-2 opacity-0 group-hover:opacity-100 transition"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {unread && (
                   <button
-                    onClick={() => remove(n._id)}
-                    className="btn btn-error btn-xs btn-circle"
+                    onClick={() => markRead(n._id)}
+                    className="btn btn-xs btn-success gap-1"
                   >
-                    <Trash2 size={14} />
+                    <Check size={14} />
+                    Read
                   </button>
-                </div>
+                )}
+
+                <button
+                  onClick={() => remove(n._id)}
+                  className="btn btn-xs btn-error btn-circle"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
             </div>
           );

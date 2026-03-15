@@ -10,7 +10,7 @@ export default function JoinRequests() {
     try {
       const { data } = await joinRequestService.getRequests();
       setRequests(data);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load requests");
     }
   };
@@ -38,120 +38,208 @@ export default function JoinRequests() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-2">
       {/* HEADER */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="p-3 rounded-full bg-primary/10">
-          <FaUserClock className="text-2xl text-primary" />
+
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-primary/10 p-3 rounded-xl">
+          <FaUserClock className="text-xl text-primary" />
         </div>
-        <h2 className="text-2xl font-bold">Join Requests</h2>
+
+        <div>
+          <h2 className="text-xl font-bold">Join Requests</h2>
+          <p className="text-sm opacity-60">
+            Students requesting access to your classrooms
+          </p>
+        </div>
       </div>
 
       {/* EMPTY STATE */}
+
       {requests.length === 0 && (
-        <div className="text-center py-16 text-base-content/60">
-          <p className="text-lg">No pending join requests</p>
-          <p className="text-sm opacity-70">
-            Students requests will appear here
-          </p>
+        <div className="flex flex-col items-center justify-center py-16 opacity-70">
+          <FaUserClock size={40} />
+          <p className="mt-3 text-sm">No join requests yet</p>
         </div>
       )}
 
-      {/* NOTIFICATION FEED */}
-      <div className="space-y-1">
+      {/* REQUEST LIST */}
+
+      <div className="space-y-3">
         {requests.map((r) => (
           <div
             key={r._id}
-            className="group relative flex gap-2 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
+            className="
+  group
+  flex flex-col sm:flex-row
+  sm:items-start
+  gap-4
+  p-4 rounded-xl border
+  bg-base-100
+  border-base-300
+  hover:bg-base-200
+  hover:shadow-md
+  transition
+  relative
+  "
           >
-            {/* STATUS SIDE BAR */}
-            <div
-              className={`w-1 rounded-full ${
-                r.status === "pending"
-                  ? "bg-warning"
-                  : r.status === "approved"
-                  ? "bg-success"
-                  : "bg-error"
-              }`}
-            />
-            {/* Avatar */}
-            <div
-              className="bg-primary text-white rounded-full w-10 h-10
-               flex items-center justify-center
-               text-sm font-bold shadow-md"
-            >
-              {(() => {
-                const name = r?.student?.name || "";
-                const parts = name.trim().split(" ").filter(Boolean);
+            {/* TOP SECTION */}
 
-                if (parts.length === 0) return "U";
-                if (parts.length === 1) return parts[0][0].toUpperCase();
+            <div className="flex items-start gap-3 flex-1">
+              {/* STATUS DOT */}
 
-                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-              })()}
-            </div>
-
-            {/* CONTENT */}
-            <div className="flex-1">
-              <p className="font-semibold">
-                {r.student.name}
-                <span className="font-normal text-base-content/70">
-                  {" "}
-                  requested to join
-                </span>{" "}
-                <span className="text-primary font-medium">
-                  {r.classroom.name}
-                </span>
-              </p>
-
-              <div className="mt-2 flex items-center gap-3">
+              <div className="mt-2">
                 <span
-                  className={`badge badge-sm ${
+                  className={`w-2.5 h-2.5 rounded-full block ${
                     r.status === "pending"
-                      ? "badge-warning"
+                      ? "bg-warning"
                       : r.status === "approved"
-                      ? "badge-success"
-                      : "badge-error"
+                      ? "bg-success"
+                      : "bg-error"
                   }`}
-                >
-                  {r.status}
-                </span>
+                />
+              </div>
 
-                <span className="text-xs text-base-content/50">
-                  Classroom access request
-                </span>
+              {/* AVATAR */}
+
+              <div
+                className="
+      bg-primary text-white
+      rounded-full w-10 h-10
+      flex items-center justify-center
+      text-sm font-bold
+      shadow shrink-0
+      "
+              >
+                {(() => {
+                  const name = r?.student?.name || "";
+                  const parts = name.trim().split(" ").filter(Boolean);
+
+                  if (parts.length === 0) return "U";
+                  if (parts.length === 1) return parts[0][0].toUpperCase();
+
+                  return (
+                    parts[0][0] + parts[parts.length - 1][0]
+                  ).toUpperCase();
+                })()}
+              </div>
+
+              {/* CONTENT */}
+
+              <div className="flex-1">
+                <p className="font-semibold leading-snug">
+                  {r.student.name}
+
+                  <span className="font-normal text-base-content/70">
+                    {" "}
+                    requested to join{" "}
+                  </span>
+
+                  <span className="text-primary font-medium wrap-break-word">
+                    {r.classroom.name}
+                  </span>
+                </p>
+
+                <div className="mt-2 flex items-center gap-2 flex-wrap">
+                  <span
+                    className={`badge badge-sm ${
+                      r.status === "pending"
+                        ? "badge-warning"
+                        : r.status === "approved"
+                        ? "badge-success"
+                        : "badge-error"
+                    }`}
+                  >
+                    {r.status}
+                  </span>
+
+                  <span className="text-xs opacity-50">
+                    Classroom access request
+                  </span>
+
+                  <span className="text-xs opacity-40">
+                    {new Date(r.createdAt).toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* ACTIONS */}
-            <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
-              {r.status === "pending" && (
-                <>
-                  <button
-                    onClick={() => approve(r._id)}
-                    className="btn btn-xs btn-success btn-circle"
-                    title="Approve"
-                  >
-                    <FaCheck size={10} />
-                  </button>
 
-                  <button
-                    onClick={() => reject(r._id)}
-                    className="btn btn-xs btn-error btn-circle"
-                    title="Reject"
-                  >
-                    <FaTimes size={16} />
-                  </button>
-                </>
-              )}
+            <div className="flex items-center justify-end gap-2 mt-2 sm:mt-0">
+              {/* DESKTOP ACTIONS */}
+              <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                {r.status === "pending" && (
+                  <>
+                    <button
+                      onClick={() => approve(r._id)}
+                      className="btn btn-xs btn-success gap-1"
+                    >
+                      <FaCheck size={12} />
+                      Approve
+                    </button>
 
-              <button
-                onClick={() => remove(r._id)}
-                className="btn btn-xs btn-circle btn-ghost text-error"
-                title="Delete"
-              >
-                <FaTrash size={16} />
-              </button>
+                    <button
+                      onClick={() => reject(r._id)}
+                      className="btn btn-xs btn-error gap-1"
+                    >
+                      <FaTimes size={12} />
+                      Reject
+                    </button>
+                  </>
+                )}
+
+                <button
+                  onClick={() => remove(r._id)}
+                  className="btn btn-xs btn-circle btn-ghost text-error"
+                >
+                  <FaTrash size={12} />
+                </button>
+              </div>
+
+              {/* MOBILE MENU */}
+
+              <div className="dropdown dropdown-end sm:hidden absolute top-1 right-1">
+                <label tabIndex={0} className="btn btn-ghost btn-sm btn-circle">
+                  ⋮
+                </label>
+
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300"
+                >
+                  {r.status === "pending" && (
+                    <>
+                      <li>
+                        <button
+                          onClick={() => approve(r._id)}
+                          className="text-success"
+                        >
+                          <FaCheck /> Approve
+                        </button>
+                      </li>
+
+                      <li>
+                        <button
+                          onClick={() => reject(r._id)}
+                          className="text-warning"
+                        >
+                          <FaTimes /> Reject
+                        </button>
+                      </li>
+                    </>
+                  )}
+
+                  <li>
+                    <button
+                      onClick={() => remove(r._id)}
+                      className="text-error"
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         ))}

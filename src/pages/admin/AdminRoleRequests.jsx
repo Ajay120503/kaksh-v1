@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import adminService from "../../services/adminService";
 import toast from "react-hot-toast";
-import { FaCheck, FaTimes, FaTrash } from "react-icons/fa";
+import {
+  FaCheck,
+  FaTimes,
+  FaTrash,
+  FaEllipsisV,
+  FaUserShield,
+} from "react-icons/fa";
 
 export default function AdminRoleRequests() {
   const [requests, setRequests] = useState([]);
@@ -54,139 +60,185 @@ export default function AdminRoleRequests() {
     }
   };
 
+  /* ================= LOADING ================= */
+
   if (loading)
     return (
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-20">
         <span className="loading loading-lg"></span>
       </div>
     );
 
+  /* ================= UI ================= */
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto px-4">
       {/* HEADER */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="p-3 rounded-full bg-primary/10">
-          <span className="text-xl">🛡️</span>
+      <div className="flex items-center gap-4 mb-8">
+        <div className="p-3 rounded-xl bg-primary/10">
+          <FaUserShield className="text-primary text-2xl" />
         </div>
-        <h1 className="text-2xl font-bold">Teacher Role Requests</h1>
-      </div>
 
-      {/* LOADING */}
-      {loading && (
-        <div className="flex justify-center mt-10">
-          <span className="loading loading-lg"></span>
-        </div>
-      )}
-
-      {/* EMPTY STATE */}
-      {!loading && requests.length === 0 && (
-        <div className="text-center py-16 text-base-content/60">
-          <p className="text-lg">No role requests available</p>
-          <p className="text-sm opacity-70">
-            Teacher requests will appear here
+        <div>
+          <h1 className="text-xl font-bold">Teacher Role Requests</h1>
+          <p className="text-sm opacity-60">
+            Manage user requests for teacher role access
           </p>
         </div>
+      </div>
+
+      {/* EMPTY STATE */}
+      {requests.length === 0 && (
+        <div className="text-center py-20 opacity-60">
+          <p className="text-lg font-medium">No role requests available</p>
+          <p className="text-sm">Teacher requests will appear here</p>
+        </div>
       )}
 
-      {/* NOTIFICATION LIST */}
-      <div className="space-y-1">
-        {requests.map((req) => (
-          <div
-            key={req._id}
-            className="group flex gap-2 p-2 bg-base-100 border border-base-300 hover:shadow-lg transition-all duration-200"
-          >
-            {/* STATUS BAR */}
-            <div
-              className={`w-1 rounded-full ${
-                req.status === "approved"
-                  ? "bg-success"
-                  : req.status === "rejected"
-                  ? "bg-error"
-                  : "bg-warning"
-              }`}
-            />
+      {/* LIST */}
+      <div className="space-y-3">
+        {requests.map((req) => {
+          const name = req?.user?.name || "Unknown User";
+          const parts = name.trim().split(" ").filter(Boolean);
 
-            {/* Avatar */}
+          const initials =
+            parts.length === 1
+              ? parts[0][0].toUpperCase()
+              : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+
+          return (
             <div
-              className="bg-primary text-white rounded-full w-10 h-10
-               flex items-center justify-center
-               text-sm font-bold shadow-md"
+              key={req._id}
+              className="group flex relative flex-col sm:flex-row sm:items-start gap-4 p-4 bg-base-100 border border-base-300 rounded-xl hover:shadow-lg transition"
             >
-              {(() => {
-                const name = req?.user?.name || "";
-                const parts = name.trim().split(" ").filter(Boolean);
+              {/* STATUS BAR */}
+              <div
+                className={`w-full sm:w-1 h-1 sm:h-full rounded-full ${
+                  req.status === "approved"
+                    ? "bg-success"
+                    : req.status === "rejected"
+                    ? "bg-error"
+                    : "bg-warning"
+                }`}
+              />
 
-                if (parts.length === 0) return "U";
-                if (parts.length === 1) return parts[0][0].toUpperCase();
+              {/* MAIN CONTENT */}
+              <div className="flex items-start gap-3 flex-1">
+                {/* AVATAR */}
+                <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shrink-0">
+                  {initials}
+                </div>
 
-                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-              })()}
-            </div>
+                {/* USER INFO */}
+                <div className="flex-1">
+                  <p className="font-semibold text-base-content">{name}</p>
 
-            {/* CONTENT */}
-            <div className="flex-1">
-              <p className="font-semibold">
-                {req.user?.name}
-                <span className="font-normal text-base-content/70">
-                  {" "}
-                  requested role{" "}
-                </span>
-                <span className="text-primary font-medium">
-                  {req.requestedRole}
-                </span>
-              </p>
+                  <p className="text-sm opacity-60 break-all">
+                    {req.user?.email}
+                  </p>
 
-              <p className="text-sm text-base-content/60">{req.user?.email}</p>
+                  <div className="flex flex-wrap items-center gap-2 mt-1">
+                    <span className="text-sm">
+                      Requested:
+                      <span className="ml-1 font-medium text-primary">
+                        {req.requestedRole}
+                      </span>
+                    </span>
 
-              <div className="flex items-center gap-3">
-                <span
-                  className={`badge badge-sm ${
-                    req.status === "approved"
-                      ? "badge-success"
-                      : req.status === "rejected"
-                      ? "badge-error"
-                      : "badge-warning"
-                  }`}
-                >
-                  {req.status}
-                </span>
+                    <span
+                      className={`badge badge-sm ${
+                        req.status === "approved"
+                          ? "badge-success"
+                          : req.status === "rejected"
+                          ? "badge-error"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {req.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-                <span className="text-xs text-base-content/50">
-                  Role change request
-                </span>
+              {/* ACTION BUTTONS */}
+              <div className="flex justify-end sm:justify-start gap-2 mt-2 sm:mt-0">
+                {/* DESKTOP */}
+                <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                  {req.status === "pending" && (
+                    <>
+                      <button
+                        onClick={() => approve(req._id)}
+                        className="btn btn-success btn-xs btn-circle"
+                      >
+                        <FaCheck size={12} />
+                      </button>
+
+                      <button
+                        onClick={() => reject(req._id)}
+                        className="btn btn-error btn-xs btn-circle"
+                      >
+                        <FaTimes size={12} />
+                      </button>
+                    </>
+                  )}
+
+                  <button
+                    onClick={() => deleteRequest(req._id)}
+                    className="btn btn-ghost btn-xs text-error btn-circle"
+                  >
+                    <FaTrash size={18} />
+                  </button>
+                </div>
+
+                {/* MOBILE MENU */}
+                <div className="dropdown dropdown-end sm:hidden absolute top-6 right-1">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-sm btn-circle"
+                  >
+                    <FaEllipsisV size={14} />
+                  </label>
+
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-36 border border-base-300"
+                  >
+                    {req.status === "pending" && (
+                      <>
+                        <li>
+                          <button
+                            onClick={() => approve(req._id)}
+                            className="text-success"
+                          >
+                            <FaCheck /> Approve
+                          </button>
+                        </li>
+
+                        <li>
+                          <button
+                            onClick={() => reject(req._id)}
+                            className="text-warning"
+                          >
+                            <FaTimes /> Reject
+                          </button>
+                        </li>
+                      </>
+                    )}
+
+                    <li>
+                      <button
+                        onClick={() => deleteRequest(req._id)}
+                        className="text-error"
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-
-            {/* ACTION BUTTONS */}
-            <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
-              {req.status === "pending" && (
-                <>
-                  <button
-                    onClick={() => approve(req._id)}
-                    className="btn btn-xs btn-success btn-circle"
-                    title="Approve"
-                  >
-                    <FaCheck size={16} />
-                  </button>
-
-                  <button
-                    onClick={() => reject(req._id)}
-                    className="btn btn-xs btn-error btn-circle"
-                    title="Reject"
-                  >
-                    <FaTimes size={16} />
-                  </button>
-                </>
-              )}
-              <button
-                onClick={() => deleteRequest(req._id)}
-                className="btn btn-xs btn-circle btn-ghost text-error"
-              >
-                <FaTrash size={16} />
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
