@@ -298,16 +298,31 @@ export default function AssignmentList() {
                 {/* Bottom */}
                 <div className="flex justify-between items-end gap-3 text-xs sm:text-sm">
                   {/* Info */}
-                  <div className="space-y-1">
+                  <div className="space-y-2 text-sm text-white/90">
+                    {/* Deadline */}
                     <div className="flex items-center gap-2">
                       <FaCalendarAlt className="text-yellow-300" />
-                      {a.deadline
-                        ? new Date(a.deadline).toLocaleDateString()
-                        : "No deadline"}
+                      {a.deadline ? (
+                        <span>
+                          {new Date(a.deadline).toLocaleDateString()} •{" "}
+                          {a.endTime
+                            ? new Date(
+                                `1970-01-01T${a.endTime}`
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "No Time"}
+                        </span>
+                      ) : (
+                        "No deadline"
+                      )}
                     </div>
+
+                    {/* Marks */}
                     <div className="flex items-center gap-2">
                       <FaStar className="text-yellow-400" />
-                      Marks: {a.maxMarks}
+                      <span>Marks: {a.maxMarks}</span>
                     </div>
                   </div>
 

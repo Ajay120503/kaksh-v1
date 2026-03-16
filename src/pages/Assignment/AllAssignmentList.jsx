@@ -296,12 +296,24 @@ export default function AllAssignmentList() {
                       {assignment.title}
                     </h2>
 
-                    <p className="text-xs mt-2 text-white/80 flex items-center gap-1">
-                      📅
-                      {assignment.deadline
-                        ? new Date(assignment.deadline).toLocaleDateString()
-                        : "No Deadline"}
-                    </p>
+                    <div className="mt-2 flex items-center gap-2 text-xs text-white/80">
+                      {assignment.deadline ? (
+                        <span className="bg-base-200 px-2 py-1 rounded-md flex items-center gap-1">
+                          📅{" "}
+                          {new Date(assignment.deadline).toLocaleDateString()} •{" "}
+                          {assignment.endTime
+                            ? new Date(
+                                `1970-01-01T${assignment.endTime}`
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "No Time"}
+                        </span>
+                      ) : (
+                        <span>No Deadline</span>
+                      )}
+                    </div>
                   </div>
 
                   {/* BOTTOM */}

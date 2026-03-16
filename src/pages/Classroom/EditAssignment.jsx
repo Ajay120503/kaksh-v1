@@ -17,6 +17,7 @@ export default function EditAssignment() {
     title: "",
     description: "",
     deadline: "",
+    endTime: "",
     maxMarks: "",
   });
 
@@ -53,6 +54,7 @@ export default function EditAssignment() {
           title: res?.title || "",
           description: res?.description || "",
           deadline: res?.deadline ? res.deadline.split("T")[0] : "",
+          endTime: res?.endTime || "",
           maxMarks: res?.maxMarks ?? "",
         });
       } catch (err) {
@@ -65,21 +67,6 @@ export default function EditAssignment() {
 
     loadAssignment();
   }, [assignmentId, navigate]);
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     setSubmitting(true);
-  //     await assignmentService.updateAssignment(assignmentId, form);
-  //     toast.success("Assignment updated successfully");
-  //     navigate(-1);
-  //   } catch {
-  //     toast.error("Update failed");
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -166,7 +153,7 @@ export default function EditAssignment() {
             </div>
 
             {/* Deadline + Marks */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-semibold">
@@ -197,6 +184,24 @@ export default function EditAssignment() {
                     setForm({ ...form, maxMarks: e.target.value })
                   }
                   min="1"
+                />
+              </div>
+
+              {/* End Time */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold">
+                    End Time <span className="text-error">*</span>
+                  </span>
+                </label>
+                <input
+                  type="time"
+                  className="input input-bordered w-full"
+                  value={form.endTime}
+                  onChange={(e) =>
+                    setForm({ ...form, endTime: e.target.value })
+                  }
+                  required
                 />
               </div>
             </div>
