@@ -29,6 +29,11 @@ export default function PostList() {
   const [language, setLanguage] = useState("plaintext");
   const [copiedPostId, setCopiedPostId] = useState(null);
 
+  const [deleteDialog, setDeleteDialog] = useState({
+    open: false,
+    postId: null,
+  });
+
   const [openComments, setOpenComments] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -237,10 +242,24 @@ export default function PostList() {
   };
 
   // Delete post
-  const handleDelete = async (postId) => {
-    if (!window.confirm("Are you sure you want to delete this post?")) return;
+  // const handleDelete = async (postId) => {
+  //   if (!window.confirm("Are you sure you want to delete this post?")) return;
+  //   try {
+  //     await postService.deletePost(postId);
+
+  //     setPostsByClass((prev) => ({
+  //       ...prev,
+  //       [classId]: null,
+  //     }));
+
+  //     toast.success("Post deleted!");
+  //   } catch (err) {
+  //     toast.error(err?.response?.data?.msg || "Failed to delete post");
+  //   }
+  // };
+  const handleDelete = async () => {
     try {
-      await postService.deletePost(postId);
+      await postService.deletePost(deleteDialog.postId);
 
       setPostsByClass((prev) => ({
         ...prev,
@@ -248,6 +267,11 @@ export default function PostList() {
       }));
 
       toast.success("Post deleted!");
+
+      setDeleteDialog({
+        open: false,
+        postId: null,
+      });
     } catch (err) {
       toast.error(err?.response?.data?.msg || "Failed to delete post");
     }
@@ -464,8 +488,20 @@ export default function PostList() {
 
                     {/* Delete */}
                     <li>
-                      <button
+                      {/* <button
                         onClick={() => handleDelete(post._id)}
+                        className="flex items-center gap-2 text-error"
+                      >
+                        <MdDelete size={16} />
+                        Delete
+                      </button> */}
+                      <button
+                        onClick={() =>
+                          setDeleteDialog({
+                            open: true,
+                            postId: post._id,
+                          })
+                        }
                         className="flex items-center gap-2 text-error"
                       >
                         <MdDelete size={16} />
@@ -621,6 +657,32 @@ export default function PostList() {
             )}
           </div>
         ))
+      )}
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteDialog.open && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-error">Delete Post</h3>
+
+            <p className="py-4">
+              Are you sure you want to delete this post? This action cannot be
+              undone.
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn btn-outline"
+                onClick={() => setDeleteDialog({ open: false, postId: null })}
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={handleDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
