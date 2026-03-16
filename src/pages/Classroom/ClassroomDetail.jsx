@@ -261,7 +261,7 @@ export default function ClassroomDetail() {
               className="hidden xl:flex w-16 h-16 rounded-full 
                       bg-linear-to-br from-primary to-secondary
                       text-white font-bold text-3xl items-center justify-center
-                      shadow-2xl ring-4 ring-white/30 hover:scale-105 transition"
+                      shadow-2xl ring-4 ring-white/30"
             >
               {(() => {
                 const name = user?.name || "";
