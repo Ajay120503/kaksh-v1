@@ -288,7 +288,16 @@ export default function Submission() {
               Due :{" "}
               {assignment.deadline
                 ? new Date(assignment.deadline).toLocaleDateString()
-                : "—"}
+                : "—"}{" "}
+              •{" "}
+              {assignment.endTime
+                ? new Date(
+                    `1970-01-01T${assignment.endTime}`
+                  ).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "No Time"}
             </span>
             <span className="px-3 py-1 rounded-full font-semibold bg-white/20">
               Max Marks : {assignment.maxMarks}
