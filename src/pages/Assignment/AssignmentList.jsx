@@ -419,7 +419,7 @@ export default function AssignmentList() {
                               onClick={() =>
                                 navigate(`/assignments/edit/${a._id}`)
                               }
-                              className="flex items-center gap-2"
+                              className="flex items-center text-blue-500 gap-2"
                             >
                               <FaPen size={14} />
                               Edit
