@@ -296,10 +296,9 @@ export default function AllAssignmentList() {
                       {assignment.title}
                     </h2>
 
-                    <div className="mt-2 flex items-center gap-2 text-xs text-white/80">
+                    <div className="mt-2 flex items-center gap-2 text-xs">
                       {assignment.deadline ? (
-                        <span className="bg-base-200 px-2 py-1 rounded-md flex items-center gap-1">
-                          📅{" "}
+                        <span className="py-1 rounded-md flex items-center gap-1">
                           {new Date(assignment.deadline).toLocaleDateString()} •{" "}
                           {assignment.endTime
                             ? new Date(
