@@ -421,12 +421,12 @@ export default function Submission() {
 
                 {/* ===== PLAGIARISM CARD ===== */}
                 {mySubmission?.plagiarism && (
-                  <div className="border border-base-300 bg-base-200 p-6 shadow-sm hover:shadow-md transition-all">
+                  <div className="border border-base-300 bg-base-200 p-4 shadow-sm hover:shadow-md transition-all">
                     {/* HEADER */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         {/* Icon */}
-                        <div className="w-11 h-11 rounded-full bg-warning/10 flex items-center justify-center text-warning text-lg">
+                        <div className="w-11 h-11 rounded-2xl bg-warning/10 flex items-center justify-center text-warning text-lg">
                           <FaSearch fontSize={18} />
                         </div>
 
