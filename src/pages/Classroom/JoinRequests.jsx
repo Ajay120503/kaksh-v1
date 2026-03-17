@@ -191,9 +191,10 @@ export default function JoinRequests() {
 
                 <button
                   onClick={() => remove(r._id)}
-                  className="btn btn-xs btn-circle btn-ghost text-error"
+                  className="btn btn-xs gap-1 btn-ghost text-error"
                 >
                   <FaTrash size={12} />
+                  Delete
                 </button>
               </div>
 
