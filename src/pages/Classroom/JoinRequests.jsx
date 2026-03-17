@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import joinRequestService from "../../services/joinRequestService";
 import toast from "react-hot-toast";
 import { FaUserClock, FaCheck, FaTimes, FaTrash } from "react-icons/fa";
+import { MoreVertical } from "lucide-react";
 
 export default function JoinRequests() {
   const [requests, setRequests] = useState([]);
@@ -168,7 +169,7 @@ export default function JoinRequests() {
 
             <div className="flex items-center justify-end gap-2 mt-2 sm:mt-0">
               {/* DESKTOP ACTIONS */}
-              <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+              {/* <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
                 {r.status === "pending" && (
                   <>
                     <button
@@ -196,13 +197,12 @@ export default function JoinRequests() {
                   <FaTrash size={12} />
                   Delete
                 </button>
-              </div>
+              </div> */}
 
               {/* MOBILE MENU */}
-
-              <div className="dropdown dropdown-end sm:hidden absolute top-1 right-1">
+              <div className="dropdown dropdown-end absolute top-1 right-1">
                 <label tabIndex={0} className="btn btn-ghost btn-sm btn-circle">
-                  ⋮
+                  <MoreVertical size={20} />
                 </label>
 
                 <ul

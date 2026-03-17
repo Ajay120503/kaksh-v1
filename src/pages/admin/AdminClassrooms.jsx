@@ -202,7 +202,7 @@ export default function AdminClassrooms() {
                         tabIndex={0}
                         className="btn btn-ghost btn-sm btn-circle"
                       >
-                        <MdMoreVert size={18} />
+                        <MdMoreVert size={20} />
                       </label>
 
                       <ul

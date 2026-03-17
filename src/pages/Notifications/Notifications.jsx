@@ -167,7 +167,7 @@ export default function Notifications() {
               >
                 {/* DESKTOP ACTIONS */}
 
-                <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                {/* <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
                   {unread && (
                     <button
                       onClick={() => markRead(n._id)}
@@ -184,11 +184,11 @@ export default function Notifications() {
                   >
                     <Trash2 size={14} />
                   </button>
-                </div>
+                </div> */}
 
                 {/* MOBILE MENU */}
 
-                <div className="dropdown dropdown-end sm:hidden">
+                <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
                     className="btn btn-ghost btn-sm btn-circle"

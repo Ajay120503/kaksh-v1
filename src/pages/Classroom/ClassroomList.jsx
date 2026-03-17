@@ -262,7 +262,7 @@ export default function ClassroomList() {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <button className="btn btn-ghost btn-sm btn-circle">
-                          <MoreVertical size={16} />
+                          <MoreVertical size={20} />
                         </button>
 
                         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40 border border-base-300 z-50">

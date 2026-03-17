@@ -163,7 +163,7 @@ export default function AdminRoleRequests() {
               {/* ACTION BUTTONS */}
               <div className="flex justify-end sm:justify-start gap-2 mt-2 sm:mt-0">
                 {/* DESKTOP */}
-                <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                {/* <div className="hidden sm:flex gap-2 opacity-0 group-hover:opacity-100 transition">
                   {req.status === "pending" && (
                     <>
                       <button
@@ -188,10 +188,10 @@ export default function AdminRoleRequests() {
                   >
                     <FaTrash size={18} />
                   </button>
-                </div>
+                </div> */}
 
                 {/* MOBILE MENU */}
-                <div className="dropdown dropdown-end sm:hidden absolute top-6 right-1">
+                <div className="dropdown dropdown-end absolute sm:top-1 top-6 right-1">
                   <label
                     tabIndex={0}
                     className="btn btn-ghost btn-sm btn-circle"

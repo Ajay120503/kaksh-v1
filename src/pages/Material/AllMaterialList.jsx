@@ -347,7 +347,7 @@ export default function AllMaterialList() {
                         tabIndex={0}
                         className="btn btn-ghost btn-sm btn-circle"
                       >
-                        <MoreVertical size={16} />
+                        <MoreVertical size={20} />
                       </label>
 
                       {/* Dropdown menu */}
