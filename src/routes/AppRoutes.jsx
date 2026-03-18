@@ -52,6 +52,10 @@ const PrivateRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
+//  classroom chat
+
+import ChatWindow from "../components/chat/ChatWindow";
+
 /* ROLE GUARD */
 const RoleRoute = ({ children, role }) => {
   const { user } = useAuth();
@@ -114,6 +118,9 @@ export default function AppRoutes() {
               </RoleRoute>
             }
           />
+
+          {/* chat route */}
+          <Route path="chat/:classId" element={<ChatWindow />} />
 
           <Route path="assignments" element={<AllAssignmentList />} />
           <Route path="assignments/:classId" element={<AssignmentList />} />

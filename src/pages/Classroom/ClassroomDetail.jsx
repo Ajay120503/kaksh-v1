@@ -16,7 +16,7 @@ import {
 import { useClassroom } from "../../context/ClassroomDetailContext";
 import { BiLock } from "react-icons/bi";
 import { FaUserGroup } from "react-icons/fa6";
-import { GiTeacher } from "react-icons/gi";
+import ChatButton from "../../components/chat/ChatButton";
 
 const classroomImages = [
   "/images/1.jpg",
@@ -390,6 +390,8 @@ export default function ClassroomDetail() {
           </div>
         </div>
       )}
+
+      <ChatButton classId={classroom._id} />
     </div>
   );
 }
