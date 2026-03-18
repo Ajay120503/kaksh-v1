@@ -54,20 +54,22 @@ const MessageBubble = ({ msg, user, socket }) => {
 
       {/* HEADER */}
       <div className="chat-header text-xs opacity-60 flex gap-1 items-center">
-        <span>{msg.sender?.name}</span>
-        <span>
-          {new Date(msg.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
+        <div className="flex flex-col">
+          <span>{msg.sender?.name}</span>
+          <span>
+            {new Date(msg.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        </div>
         {msg.isEdited && <span className="italic">(edited)</span>}
       </div>
 
       {/* BUBBLE */}
       <div className="relative group w-fit max-w-[75%] sm:max-w-[60%]">
         <div
-          className={`chat-bubble ${
+          className={`chat-bubble p-1 ${
             isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
           } shadow-md whitespace-pre-wrap break-words space-y-1`}
         >

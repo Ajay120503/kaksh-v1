@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IoSend } from "react-icons/io5";
 import { FaImage, FaSmile, FaTimes } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
@@ -11,6 +11,8 @@ const ChatInput = ({ socket, classId, user }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  const typingTimeoutRef = useRef(null);
 
   /* ================= SEND TEXT ================= */
   const sendMessage = () => {
@@ -146,10 +148,21 @@ const ChatInput = ({ socket, classId, user }) => {
             value={text}
             onChange={(e) => {
               setText(e.target.value);
+
               socket.emit("typing", {
                 classId,
                 userName: user.name,
               });
+
+              // CLEAR OLD TIMER
+              if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+              }
+
+              // SET NEW TIMER (STOP AFTER 1.5s)
+              typingTimeoutRef.current = setTimeout(() => {
+                socket.emit("stopTyping", { classId });
+              }, 1500);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") sendMessage();

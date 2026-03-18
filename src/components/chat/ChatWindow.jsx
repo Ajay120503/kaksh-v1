@@ -12,7 +12,7 @@ const ChatWindow = () => {
   const { user } = useAuth();
   const { classId } = useParams();
   const [messages, setMessages] = useState([]);
-  const [typingUser, setTypingUser] = useState("");
+  const [typingUser, setTypingUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
@@ -57,11 +57,21 @@ const ChatWindow = () => {
       );
     });
 
-    socket.on("typing", setTypingUser);
-    socket.on("stopTyping", () => setTypingUser(""));
+    socket.on("typing", ({ userName }) => {
+      setTypingUser(userName);
+    });
+
+    socket.on("stopTyping", () => {
+      setTypingUser(null);
+    });
+
     socket.on("onlineUsers", setOnlineUsers);
 
-    return () => socket.disconnect();
+    return () => {
+      socket.off("typing");
+      socket.off("stopTyping");
+      socket.disconnect();
+    };
   }, [classId, user]);
 
   /* ================= AUTO SCROLL ================= */
@@ -81,7 +91,7 @@ const ChatWindow = () => {
 
       {/* 💬 MESSAGES AREA */}
       <div
-        className="flex-1 overflow-y-auto px-3  space-y-4
+        className="flex-1 overflow-y-auto px-3 pb-5  space-y-4
         bg-base-200 scroll-smooth"
       >
         {messages.length === 0 && (
