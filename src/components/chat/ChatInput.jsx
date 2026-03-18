@@ -88,13 +88,13 @@ const ChatInput = ({ socket, classId, user }) => {
               className="w-20 h-20 object-cover rounded-lg border"
             />
           ) : (
-            <div className="w-20 h-20 line-clamp-1 flex items-center justify-center bg-base-300 rounded-lg text-xs text-center p-2">
+            <div className="w-20 h-20 truncate flex items-center justify-center bg-base-300 rounded-lg text-xs text-center p-2">
               {selectedFile.name}
             </div>
           )}
 
           {/* FILE INFO */}
-          <div className="flex-1 text-sm">
+          <div className="flex-1 text-sm truncate">
             <p className="font-semibold truncate">{selectedFile.name}</p>
             <p className="text-xs opacity-70">
               {(selectedFile.size / 1024).toFixed(1)} KB
