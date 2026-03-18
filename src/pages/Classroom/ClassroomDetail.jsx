@@ -159,6 +159,12 @@ export default function ClassroomDetail() {
     <div className="max-w-7xl mx-auto space-y-8">
       {/* ================= HERO ================= */}
       <div className="relative overflow-hidden border border-base-300 bg-base-100 shadow-2xl">
+        <div className="absolute top-4 right-4 z-20">
+          <ChatButton
+            classId={classroom._id}
+            className="btn btn-circle btn-primary shadow-lg hover:scale-105 transition-all duration-300"
+          />
+        </div>
         {/* Background Image */}
         <div
           className="h-58 md:h-64 w-full bg-cover bg-center scale-105"
@@ -390,8 +396,6 @@ export default function ClassroomDetail() {
           </div>
         </div>
       )}
-
-      <ChatButton classId={classroom._id} />
     </div>
   );
 }

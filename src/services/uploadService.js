@@ -6,7 +6,12 @@ const uploadService = {
     formData.append("file", file);
     formData.append("fileType", file.type);
 
-    const res = await api.post("/upload/upload", formData);
+    const res = await api.post("/upload/upload", formData, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    });
 
     return {
       fileUrl: res.data.fileUrl,

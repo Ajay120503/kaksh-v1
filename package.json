@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "daisyui": "^5.5.14",
+    "emoji-picker-react": "^4.18.0",
     "highlight.js": "^11.11.1",
     "jspdf": "^4.1.0",
     "jspdf-autotable": "^5.0.7",

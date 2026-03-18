@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteMessage, editMessage } from "../../services/messageService";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoIosArrowDown } from "react-icons/io";
 
 const MessageBubble = ({ msg, user, socket }) => {
   const isMe = msg.sender?._id === user._id || msg.sender === user._id;
@@ -18,6 +18,8 @@ const MessageBubble = ({ msg, user, socket }) => {
   };
 
   const handleEdit = async () => {
+    if (!text.trim()) return;
+
     await editMessage(msg._id, text);
 
     socket.emit("editMessage", {
@@ -31,13 +33,12 @@ const MessageBubble = ({ msg, user, socket }) => {
 
   return (
     <div className={`chat ${isMe ? "chat-end" : "chat-start"}`}>
-      {/* AVATAR (UNCHANGED) */}
+      {/* AVATAR */}
       <div className="chat-image avatar placeholder">
         <div
           className={`${
             isMe ? "bg-primary" : "bg-secondary"
-          } text-primary-content rounded-full w-10 h-10
-          flex items-center justify-center text-sm font-bold shadow-md`}
+          } text-primary-content rounded-full w-10 h-10 flex items-center justify-center text-sm font-bold shadow-md`}
         >
           {(() => {
             const name = msg.sender?.name || "";
@@ -52,28 +53,23 @@ const MessageBubble = ({ msg, user, socket }) => {
       </div>
 
       {/* HEADER */}
-      <div className="chat-header text-xs opacity-60 flex gap-1">
-        <div className=" flex flex-col">
-          <div>{msg.sender?.name}</div>
-          <div>
-            <span>
-              {new Date(msg.createdAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </span>
-          </div>
-        </div>
-        <div>{msg.isEdited && <span className="italic">(edited)</span>}</div>
+      <div className="chat-header text-xs opacity-60 flex gap-1 items-center">
+        <span>{msg.sender?.name}</span>
+        <span>
+          {new Date(msg.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+        {msg.isEdited && <span className="italic">(edited)</span>}
       </div>
 
-      {/* BUBBLE WRAPPER */}
+      {/* BUBBLE */}
       <div className="relative group w-fit max-w-[75%] sm:max-w-[60%]">
-        {/* BUBBLE (UNCHANGED STYLE + FIXED TEXT WRAP) */}
         <div
           className={`chat-bubble ${
             isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
-          } shadow-md whitespace-pre-wrap break-normal`}
+          } shadow-md whitespace-pre-wrap break-words space-y-1`}
         >
           {msg.isDeleted ? (
             <i>Message deleted</i>
@@ -81,25 +77,55 @@ const MessageBubble = ({ msg, user, socket }) => {
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleEdit();
+              }}
               className="input input-sm w-full text-neutral outline-0"
+              autoFocus
             />
           ) : (
-            msg.text
+            <>
+              {/* TEXT */}
+              {msg.type === "text" && <p>{msg.text}</p>}
+
+              {/* IMAGE */}
+              {msg.type === "image" && msg.fileUrl && (
+                <div className="mt-1 overflow-hidden rounded-lg">
+                  <img
+                    src={msg.fileUrl}
+                    alt="sent"
+                    onClick={() => window.open(msg.fileUrl, "_blank")}
+                    className="w-full h-auto max-h-64 object-cover cursor-pointer"
+                  />
+                </div>
+              )}
+
+              {/* FILE */}
+              {msg.type === "file" && msg.fileUrl && (
+                <a
+                  href={msg.fileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center text-base-content gap-2 mt-1 bg-base-200 px-3 py-2 rounded-lg hover:bg-base-300 transition"
+                >
+                  <span className="truncate max-w-37.5">
+                    {msg.fileUrl.split("/").pop()}
+                  </span>
+                </a>
+              )}
+            </>
           )}
         </div>
 
+        {/* ACTION MENU */}
         {isMe && !msg.isDeleted && (
-          <div className="absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition">
+          <div className="absolute -top-2 right-0 transition">
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
-                <BsThreeDotsVertical size={14} />
+                <IoIosArrowDown size={14} />
               </label>
 
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-20 menu p-2 shadow-lg 
-                bg-base-100 rounded-box w-32"
-              >
+              <ul className="dropdown-content z-20 menu p-2 shadow-lg bg-base-100 rounded-box w-32">
                 {!editing ? (
                   <>
                     <li>
