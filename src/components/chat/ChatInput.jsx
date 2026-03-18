@@ -132,7 +132,7 @@ const ChatInput = ({ socket, classId, user }) => {
       )}
 
       {/* INPUT BAR */}
-      <div className="p-3 flex items-center gap-2">
+      <div className="p-2 flex items-center gap-1">
         {/* FILE BUTTON */}
         <label className="btn btn-circle btn-ghost">
           <FaImage size={18} />
@@ -140,7 +140,7 @@ const ChatInput = ({ socket, classId, user }) => {
         </label>
 
         {/* INPUT */}
-        <div className="flex-1 flex items-center bg-base-200 rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-primary transition">
+        <div className="flex-1 min-w-20 flex items-center bg-base-200 rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-primary transition">
           <input
             type="text"
             placeholder="Type a message..."
