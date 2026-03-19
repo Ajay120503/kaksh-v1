@@ -112,16 +112,26 @@ const MessageBubble = ({ msg, user, socket }) => {
 
             {/* FILE */}
             {msg.type === "file" && msg.fileUrl && (
-              <a
-                href={msg.fileUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center text-base-content gap-2 mt-1 bg-base-200 px-3 py-2 rounded-lg hover:bg-base-300 transition"
-              >
-                <span className="truncate max-w-37.5">
-                  {msg.fileUrl.split("/").pop()}
-                </span>
-              </a>
+              <>
+                {msg.fileType?.startsWith("image/") ? (
+                  <img
+                    src={msg.fileUrl}
+                    alt="preview"
+                    className="w-full h-auto max-h-64 object-cover rounded-lg"
+                  />
+                ) : (
+                  <a
+                    href={msg.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3 bg-base-200 px-4 py-3 rounded-xl"
+                  >
+                    <span className="truncate text-base-content">
+                      {msg.fileUrl.split("/").pop()}
+                    </span>
+                  </a>
+                )}
+              </>
             )}
           </>
         )}
