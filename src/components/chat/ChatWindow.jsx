@@ -69,6 +69,12 @@ const ChatWindow = () => {
 
     socket.on("onlineUsers", setOnlineUsers);
 
+      socket.on("newNotification", (data) => {
+        console.log("Notification:", data);
+
+        // toast.success(data.message);
+      });
+
     return () => {
       socket.off("receiveMessage");
       socket.off("messageEdited");
@@ -76,6 +82,7 @@ const ChatWindow = () => {
       socket.off("typing");
       socket.off("stopTyping");
       socket.off("onlineUsers");
+      socket.off("newNotification");
       socket.disconnect();
     };
   }, [classId, user]);
