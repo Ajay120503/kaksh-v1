@@ -104,7 +104,7 @@ const ChatWindow = () => {
 
       {/* 💬 MESSAGES AREA */}
       <div
-        className="flex-1 overflow-y-auto px-3 pb-5 space-y-4
+        className="flex-1 overflow-y-auto overflow-x-hidden px-3 pb-5 space-y-4
         bg-base-200 scroll-smooth"
       >
         {messages.length === 0 && (

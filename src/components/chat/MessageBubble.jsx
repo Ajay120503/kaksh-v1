@@ -53,7 +53,7 @@ const MessageBubble = ({ msg, user, socket }) => {
       </div>
 
       {/* HEADER */}
-      <div className="chat-header text-xs opacity-60 flex gap-1 items-center">
+      <div className="chat-header text-xs opacity-60">
         <div className="flex flex-col">
           <span className="font-medium">{msg.sender?.name}</span>
           <div>
@@ -69,90 +69,90 @@ const MessageBubble = ({ msg, user, socket }) => {
       </div>
 
       {/* BUBBLE */}
-      <div className="relative group w-fit text-sm max-w-[75%] sm:max-w-[60%]">
-        <div
-          className={`chat-bubble p-1 ${
-            isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
-          } shadow-md whitespace-pre-line break-words`}
-        >
-          {msg.isDeleted ? (
-            <i>Message deleted</i>
-          ) : editing ? (
-            <input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleEdit();
-              }}
-              className="input input-sm w-full text-neutral outline-0"
-              autoFocus
-            />
-          ) : (
-            <>
-              {/* TEXT */}
-              {msg.type === "text" && <p>{msg.text}</p>}
+      {/* <div className="relative group w-fit text-sm max-w-[75%] sm:max-w-[60%]"> */}
+      <div
+        className={`chat-bubble ${
+          isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
+        } shadow-md`}
+      >
+        {msg.isDeleted ? (
+          <i>Message deleted</i>
+        ) : editing ? (
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleEdit();
+            }}
+            className="input input-sm w-full text-neutral outline-0"
+            autoFocus
+          />
+        ) : (
+          <>
+            {/* TEXT */}
+            {msg.type === "text" && <p>{msg.text}</p>}
 
-              {/* IMAGE */}
-              {msg.type === "image" && msg.fileUrl && (
-                <div className="mt-1 overflow-hidden rounded-lg">
-                  <img
-                    src={msg.fileUrl}
-                    alt="sent"
-                    onClick={() => window.open(msg.fileUrl, "_blank")}
-                    className="w-full h-auto max-h-64 object-cover cursor-pointer"
-                  />
-                </div>
-              )}
+            {/* IMAGE */}
+            {msg.type === "image" && msg.fileUrl && (
+              <div className="mt-1 overflow-hidden rounded-lg">
+                <img
+                  src={msg.fileUrl}
+                  alt="sent"
+                  onClick={() => window.open(msg.fileUrl, "_blank")}
+                  className="w-full h-auto max-h-64 object-cover cursor-pointer"
+                />
+              </div>
+            )}
 
-              {/* FILE */}
-              {msg.type === "file" && msg.fileUrl && (
-                <a
-                  href={msg.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center text-base-content gap-2 mt-1 bg-base-200 px-3 py-2 rounded-lg hover:bg-base-300 transition"
-                >
-                  <span className="truncate max-w-37.5">
-                    {msg.fileUrl.split("/").pop()}
-                  </span>
-                </a>
-              )}
-            </>
-          )}
-        </div>
-
-        {/* ACTION MENU */}
-        {isMe && !msg.isDeleted && (
-          <div className="absolute -top-2 right-0 transition">
-            <div className="dropdown dropdown-left">
-              <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
-                <IoIosArrowDown size={14} />
-              </label>
-
-              <ul className="dropdown-content z-20 menu p-2 shadow-lg bg-base-100 rounded-box w-32">
-                {!editing ? (
-                  <>
-                    <li>
-                      <button onClick={() => setEditing(true)}>Edit</button>
-                    </li>
-                    <li>
-                      <button onClick={handleDelete} className="text-error">
-                        Delete
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <li>
-                    <button onClick={handleEdit} className="text-success">
-                      Save
-                    </button>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
+            {/* FILE */}
+            {msg.type === "file" && msg.fileUrl && (
+              <a
+                href={msg.fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center text-base-content gap-2 mt-1 bg-base-200 px-3 py-2 rounded-lg hover:bg-base-300 transition"
+              >
+                <span className="truncate max-w-37.5">
+                  {msg.fileUrl.split("/").pop()}
+                </span>
+              </a>
+            )}
+          </>
         )}
       </div>
+
+      {/* ACTION MENU */}
+      {isMe && !msg.isDeleted && (
+        <div className="absolute -top-2 right-0 transition">
+          <div className="dropdown dropdown-left">
+            <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
+              <IoIosArrowDown size={14} />
+            </label>
+
+            <ul className="dropdown-content z-20 menu p-2 shadow-lg bg-base-100 rounded-box w-32">
+              {!editing ? (
+                <>
+                  <li>
+                    <button onClick={() => setEditing(true)}>Edit</button>
+                  </li>
+                  <li>
+                    <button onClick={handleDelete} className="text-error">
+                      Delete
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <button onClick={handleEdit} className="text-success">
+                    Save
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+      {/* </div> */}
     </div>
   );
 };
