@@ -56,14 +56,16 @@ const MessageBubble = ({ msg, user, socket }) => {
       <div className="chat-header text-xs opacity-60 flex gap-1 items-center">
         <div className="flex flex-col">
           <span className="font-medium">{msg.sender?.name}</span>
-          <time className="opacity-50">
-            {new Date(msg.createdAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </time>
+          <div>
+            <time className="opacity-50">
+              {new Date(msg.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </time>
+            {msg.isEdited && <span className="italic">(edited)</span>}
+          </div>
         </div>
-        {msg.isEdited && <span className="italic">(edited)</span>}
       </div>
 
       {/* BUBBLE */}
@@ -122,7 +124,7 @@ const MessageBubble = ({ msg, user, socket }) => {
         {/* ACTION MENU */}
         {isMe && !msg.isDeleted && (
           <div className="absolute -top-2 right-0 transition">
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-left">
               <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
                 <IoIosArrowDown size={14} />
               </label>
