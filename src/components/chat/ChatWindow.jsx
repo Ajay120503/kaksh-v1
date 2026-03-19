@@ -70,8 +70,12 @@ const ChatWindow = () => {
     socket.on("onlineUsers", setOnlineUsers);
 
     return () => {
+      socket.off("receiveMessage");
+      socket.off("messageEdited");
+      socket.off("messageDeleted");
       socket.off("typing");
       socket.off("stopTyping");
+      socket.off("onlineUsers");
       socket.disconnect();
     };
   }, [classId, user]);

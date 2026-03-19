@@ -162,7 +162,7 @@ const ChatInput = ({ socket, classId, user }) => {
               // SET NEW TIMER (STOP AFTER 1.5s)
               typingTimeoutRef.current = setTimeout(() => {
                 socket.emit("stopTyping", { classId });
-              }, 1500);
+              }, 1000);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") sendMessage();
