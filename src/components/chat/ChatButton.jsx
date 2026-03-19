@@ -11,7 +11,7 @@ const ChatButton = ({ classId }) => {
   return (
     <button
       onClick={handleClick}
-      className="btn btn-secondary btn-circle shadow-lg z-50"
+      className="btn btn-primary btn-circle shadow-lg z-50"
     >
       <div className="tooltip tooltip-left" data-tip="Open Chat">
         <IoChatbubbleEllipses size={22} />
