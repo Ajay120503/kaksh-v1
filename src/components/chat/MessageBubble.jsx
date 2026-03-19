@@ -63,7 +63,6 @@ const MessageBubble = ({ msg, user, socket }) => {
                 minute: "2-digit",
               })}
             </time>
-            {msg.isEdited && <span className="italic">(edited)</span>}
           </div>
         </div>
       </div>
@@ -71,7 +70,7 @@ const MessageBubble = ({ msg, user, socket }) => {
       {/* BUBBLE */}
       {/* <div className="relative group w-fit text-sm max-w-[75%] sm:max-w-[60%]"> */}
       <div
-        className={`chat-bubble ${
+        className={`chat-bubble relative  ${
           isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
         } shadow-md`}
       >
@@ -90,7 +89,14 @@ const MessageBubble = ({ msg, user, socket }) => {
         ) : (
           <>
             {/* TEXT */}
-            {msg.type === "text" && <p>{msg.text}</p>}
+            {msg.type === "text" && (
+              <p>
+                {msg.text}{" "}
+                {msg.isEdited && (
+                  <span className="italic text-xs">(edited)</span>
+                )}
+              </p>
+            )}
 
             {/* IMAGE */}
             {msg.type === "image" && msg.fileUrl && (
@@ -119,39 +125,39 @@ const MessageBubble = ({ msg, user, socket }) => {
             )}
           </>
         )}
-      </div>
+        {/* ACTION MENU */}
+        {isMe && !msg.isDeleted && (
+          <div className="absolute -top-5 right-0 transition">
+            <div className="dropdown dropdown-left">
+              <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
+                <IoIosArrowDown className="text-base-content" size={18} />
+              </label>
 
-      {/* ACTION MENU */}
-      {isMe && !msg.isDeleted && (
-        <div className="absolute -top-2 right-0 transition">
-          <div className="dropdown dropdown-left">
-            <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle">
-              <IoIosArrowDown size={14} />
-            </label>
-
-            <ul className="dropdown-content z-20 menu p-2 shadow-lg bg-base-100 rounded-box w-32">
-              {!editing ? (
-                <>
+              <ul className="dropdown-content z-20 menu p-2 border border-base-300 text-base-content shadow-lg bg-base-100 rounded-box">
+                {!editing ? (
+                  <>
+                    <li>
+                      <button onClick={() => setEditing(true)}>Edit</button>
+                    </li>
+                    <li>
+                      <button onClick={handleDelete} className="text-error">
+                        Delete
+                      </button>
+                    </li>
+                  </>
+                ) : (
                   <li>
-                    <button onClick={() => setEditing(true)}>Edit</button>
-                  </li>
-                  <li>
-                    <button onClick={handleDelete} className="text-error">
-                      Delete
+                    <button onClick={handleEdit} className="text-success">
+                      Save
                     </button>
                   </li>
-                </>
-              ) : (
-                <li>
-                  <button onClick={handleEdit} className="text-success">
-                    Save
-                  </button>
-                </li>
-              )}
-            </ul>
+                )}
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
       {/* </div> */}
     </div>
   );
