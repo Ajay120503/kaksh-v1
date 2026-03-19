@@ -83,7 +83,7 @@ const MessageBubble = ({ msg, user, socket }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") handleEdit();
             }}
-            className="input input-sm w-full text-neutral outline-0"
+            className="input input-sm w-full text-base-content outline-none"
             autoFocus
           />
         ) : (
