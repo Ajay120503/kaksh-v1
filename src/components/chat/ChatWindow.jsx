@@ -58,7 +58,9 @@ const ChatWindow = () => {
     });
 
     socket.on("typing", ({ userName }) => {
-      setTypingUser(userName);
+      if (userName !== user.name) {
+        setTypingUser(userName);
+      }
     });
 
     socket.on("stopTyping", () => {
