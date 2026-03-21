@@ -588,9 +588,11 @@ export default function PostList() {
                 {post.attachments.map((file, idx) => {
                   const filename =
                     file?.filename || file?.url?.split("/").pop() || "";
+
                   const ext = filename.includes(".")
                     ? filename.split(".").pop().toLowerCase()
                     : "";
+
                   const isImage = [
                     "jpg",
                     "jpeg",
@@ -599,27 +601,35 @@ export default function PostList() {
                     "webp",
                   ].includes(ext);
 
-                  return isImage ? (
-                    <a key={idx} href={file.url} target="_blank">
-                      <img
-                        src={file.url}
-                        alt={file.filename}
-                        className="rounded-lg border border-base-300 object-cover h-50 w-full"
-                      />
-                    </a>
-                  ) : (
-                    <div className="relative">
-                      <img
-                        src={classroomImages[idx % classroomImages.length]}
-                        alt="file preview"
-                        className="rounded-lg border border-base-300 object-cover h-50 w-full opacity-90"
-                      />
+                  return (
+                    <a
+                      key={idx}
+                      href={file.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block relative group"
+                    >
+                      {isImage ? (
+                        <img
+                          src={file.url}
+                          alt={file.filename}
+                          className="rounded-lg border border-base-300 object-cover h-50 w-full transition group-hover:scale-[1.02]"
+                        />
+                      ) : (
+                        <>
+                          <img
+                            src={classroomImages[idx % classroomImages.length]}
+                            alt="file preview"
+                            className="rounded-lg border border-base-300 object-cover h-50 w-full opacity-90"
+                          />
 
-                      {/* filename overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2 rounded-b-lg truncate">
-                        {filename}
-                      </div>
-                    </div>
+                          {/* overlay */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2 rounded-b-lg truncate">
+                            📄 {filename}
+                          </div>
+                        </>
+                      )}
+                    </a>
                   );
                 })}
               </div>
