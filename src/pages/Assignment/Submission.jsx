@@ -865,7 +865,7 @@ export default function Submission() {
                   {/* ===== WARNING MESSAGE ===== */}
                   {activePlagiarism.flagged && (
                     <div className="rounded-xl bg-error/10 text-error px-4 py-3 text-sm flex items-center gap-2">
-                      ⚠ High similarity detected. Instructor review recommended
+                      ⚠ similarity detected. Instructor review recommended
                       before grading.
                     </div>
                   )}
