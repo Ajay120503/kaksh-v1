@@ -29,7 +29,7 @@ const ChatHeader = ({ onlineUsers }) => {
 
         {/* EXTRA COUNT */}
         {onlineUsers.length > 3 && (
-          <div className="ml-2 text-xs text-base-content/60">
+          <div className="ml-2 text-xs ring rounded-full px-2 font-extrabold text-base-content/60">
             +{onlineUsers.length - 3}
           </div>
         )}
