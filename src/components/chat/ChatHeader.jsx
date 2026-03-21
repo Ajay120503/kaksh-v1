@@ -5,7 +5,7 @@ const ChatHeader = ({ onlineUsers }) => {
     <div className="p-4 border-b border-base-300 bg-base-100 rounded-t-2xl flex items-center justify-between">
       {/* LEFT SIDE */}
       <div className="flex flex-col">
-        <h2 className="font-semibold text-lg sm:text-xl text-base-content">
+        <h2 className="font-extrabold text-lg sm:text-xl text-base-content">
           Class Chat
         </h2>
 
