@@ -8,6 +8,46 @@ const MessageBubble = ({ msg, user, socket }) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(msg.text);
 
+  const getAvatarColor = (id) => {
+    const colors = [
+      "bg-red-300",
+      "bg-green-300",
+      "bg-blue-400",
+      "bg-yellow-300",
+      "bg-pink-400",
+      "bg-teal-400",
+    ];
+
+    if (!id) return colors[0];
+
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  const getBubbleColor = (id) => {
+    const colors = [
+      "chat-bubble-error",
+      "chat-bubble-success",
+      "chat-bubble-secondary",
+      "chat-bubble-warning",
+      "chat-bubble-primary",
+      "chat-bubble-success",
+    ];
+
+    if (!id) return colors[0];
+
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return colors[Math.abs(hash) % colors.length];
+  };
+
   const handleDelete = async () => {
     await deleteMessage(msg._id);
 
@@ -37,7 +77,7 @@ const MessageBubble = ({ msg, user, socket }) => {
       <div className="chat-image avatar placeholder">
         <div
           className={`${
-            isMe ? "bg-primary" : "bg-secondary"
+            isMe ? "bg-primary" : getAvatarColor(msg.sender?._id)
           } text-primary-content rounded-full w-10 h-10 flex items-center justify-center text-sm font-bold shadow-md`}
         >
           {(() => {
@@ -71,7 +111,7 @@ const MessageBubble = ({ msg, user, socket }) => {
       {/* <div className="relative group w-fit text-sm max-w-[75%] sm:max-w-[60%]"> */}
       <div
         className={`chat-bubble relative  ${
-          isMe ? "chat-bubble-primary" : "chat-bubble-secondary"
+          isMe ? "chat-bubble-primary" : getBubbleColor(msg.sender?._id)
         } shadow-md`}
       >
         {msg.isDeleted ? (
